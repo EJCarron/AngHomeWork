@@ -96,6 +96,7 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="EmptyJSFile.js" />
+    <Content Include="Views\Home\test.js" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
