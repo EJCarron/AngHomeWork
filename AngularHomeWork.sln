@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularHomeWork", "AngularHomeWork\AngularHomeWork.csproj", "{CFFDD036-DD00-40F7-8290-F3D90BE95427}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularHomeWork.Tests", "AngularHomeWork.Tests\AngularHomeWork.Tests.csproj", "{AE75570A-08F0-488B-A5A5-3C66839365A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
