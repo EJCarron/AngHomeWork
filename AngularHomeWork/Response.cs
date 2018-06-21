@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Pupil {
+namespace AngularHomeWork {
     //--------------------RESPONSES-------------------------
 
     public enum ResponseState {
