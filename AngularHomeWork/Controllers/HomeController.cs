@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 
+using AngularHomeWork.Models;
+
 namespace AngularHomeWork.Controllers {
     public class HomeController : Controller {
         public ActionResult Index() {
@@ -15,6 +17,15 @@ namespace AngularHomeWork.Controllers {
             ViewData["Runtime"] = isMono ? "Mono" : ".NET";
 
             return View();
+        }
+
+        public ActionResult Teacher(int id) {
+
+            UserResponse response = TheDataStore.FetchTeacher(id);
+
+            Teacher teacher = (Teacher)response.user;
+
+            return View(teacher);
         }
     }
 }

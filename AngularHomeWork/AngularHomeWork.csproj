@@ -85,6 +85,11 @@
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Models\Users.cs" />
+    <Compile Include="DataBaseKeys.cs" />
+    <Compile Include="DataKeys.cs" />
+    <Compile Include="TheDataStore.cs" />
+    <Compile Include="Response.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -98,6 +103,12 @@
     <Content Include="EmptyJSFile.js" />
     <Content Include="Views\Home\test.js" />
     <Content Include="test2.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">
+      <Project>{D80F7684-C472-4A56-88B6-62689FE5171A}</Project>
+      <Name>SqlWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

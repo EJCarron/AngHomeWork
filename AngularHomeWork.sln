@@ -5,19 +5,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularHomeWork", "AngularH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularHomeWork.Tests", "AngularHomeWork.Tests\AngularHomeWork.Tests.csproj", "{AE75570A-08F0-488B-A5A5-3C66839365A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlWrapper", "..\SqlWrapper\SqlWrapper\SqlWrapper.csproj", "{D80F7684-C472-4A56-88B6-62689FE5171A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		testMidTier|Any CPU = testMidTier|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.testMidTier|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFDD036-DD00-40F7-8290-F3D90BE95427}.testMidTier|Any CPU.Build.0 = Debug|Any CPU
 		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE75570A-08F0-488B-A5A5-3C66839365A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.testMidTier|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE75570A-08F0-488B-A5A5-3C66839365A4}.testMidTier|Any CPU.Build.0 = Debug|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.testMidTier|Any CPU.ActiveCfg = testMidTier|Any CPU
+		{D80F7684-C472-4A56-88B6-62689FE5171A}.testMidTier|Any CPU.Build.0 = testMidTier|Any CPU
 	EndGlobalSection
 EndGlobal
