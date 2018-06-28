@@ -2,6 +2,8 @@
 using SqlWrapper;
 using AngularHomeWork.Models;
 using System.Collections.ObjectModel;
+using System.Collections;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using MySql.Data;
 using System.Web;
@@ -14,9 +16,16 @@ namespace AngularHomeWork {
         public static UserResponse FetchTeacher(int teacherId) {
             UserResponse userResponse = new UserResponse();
 
-            Collection<ClassRoomListItem> classRooms = makeClassRoomListItems(userResponse.response, teacherId);
+            // Collection<ClassRoomListItem> classRooms = makeClassRoomListItems(userResponse.response, teacherId);
 
-            Teacher teacher = new Teacher(teacherId, classRooms);
+            Collection<string> classRoomNames = getClassRoomNames(userResponse.response, teacherId);
+
+            string[] arrayOfCRNames = new string[classRoomNames.Count];
+
+            classRoomNames.CopyTo(arrayOfCRNames, 0);
+
+
+            Teacher teacher = new Teacher(teacherId, arrayOfCRNames);
 
             userResponse.user = teacher;
 
@@ -62,6 +71,52 @@ namespace AngularHomeWork {
 
 
         }
+
+        private static Collection<string> getClassRoomNames(Response response, int teacherId){
+
+            Collection<string> classRoomNames = new Collection<string>();
+
+
+            SELECT select = new SELECT()
+                .col(ClassRooms.classRoomName)
+                .FROM(Tables.ClassRooms)
+                .WHERE(new OperatorExpression()
+                       .addExpression(ClassRooms.teacherId)
+                       .Equals()
+                       .addExpression(new IntLiteral(teacherId)));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    classRoomNames.Add(reader.GetString(ClassRooms.classRoomName));
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            return classRoomNames;
+
+        }
+       
 
         private static Collection<ClassRoomListItem> makeClassRoomListItems(Response response, int teacherId) {
 

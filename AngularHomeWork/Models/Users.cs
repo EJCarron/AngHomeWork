@@ -21,10 +21,13 @@ namespace AngularHomeWork.Models {
 
     public class Teacher : User {
 
-        public Collection<ClassRoomListItem> classRooms = new Collection<ClassRoomListItem>();
 
-        public Teacher(int id, Collection<ClassRoomListItem> classRooms) {
-            this.classRooms = classRooms;
+
+        public string[] classRoomNames;
+
+        public Teacher(int id, string[] classRoomNames ) {
+
+            this.classRoomNames = classRoomNames;
             this.id = id;
         }
     }

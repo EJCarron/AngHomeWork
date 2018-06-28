@@ -9,8 +9,14 @@ namespace AngularHomeWork {
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Teacher", id = 1}
             );
+
+            //routes.MapRoute(
+            //    name: "Teacher",
+            //    url: "{controller}/Teacher/{id}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
         }
     }
 }
