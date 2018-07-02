@@ -85,6 +85,7 @@
     <Folder Include="Client\Modules\" />
     <Folder Include="Client\Controllers\" />
     <Folder Include="Client\Services\" />
+    <Folder Include="Client\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="DataKeys.cs" />
     <Compile Include="TheDataStore.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="Controllers\ClassRoomController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -129,7 +131,14 @@
     <Content Include="css\angular-material.layout-attributes.min.css" />
     <Content Include="css\angular-material.layout-attributes.css" />
     <Content Include="css\angular-material.css" />
-    <Content Include="Client\Controllers\SideNavController.js" />
+    <Content Include="Client\Services\ModelCommandService.js" />
+    <Content Include="Client\Controllers\TeacherPageController.js" />
+    <Content Include="Client\Controllers\TeacherHomeController.js" />
+    <Content Include="Client\Controllers\CreateClassRoomController.js" />
+    <Content Include="Client\Views\TeacherHomeView.html" />
+    <Content Include="Client\Views\CreateClassRoomView.html" />
+    <Content Include="Client\Controllers\TeacherClassRoomController.js" />
+    <Content Include="Client\Views\TeacherClassRoomView.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

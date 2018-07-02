@@ -17,7 +17,7 @@
 
 
 
-<body ng-app="app" ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"","'")) ; teacherName = '@Model.name'" layout="column">
+<body ng-app="app"  ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'" layout="column">
     
     <md-toolbar class="md-primary">
         <p>{{teacherName}}</p>
@@ -33,36 +33,47 @@
                             max-width: 10em !important;">
             <md-list>
                 <md-list-item>
-                    <md-button class="md-accent md-raised md-hue-4">Home</md-button>
+                    <md-button href="#!TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
                 </md-list-item>
                 <md-list-item ng-repeat="classRoom in classRooms">
-                    <md-button>{{classRoom}}</md-button>
+                    <md-button href="#!TeacherClassRoom">{{classRoom}}</md-button>
+                </md-list-item>
+                <md-list-item>
+                    <md-button href="#!CreateClassRoom" class="md-fab">+</md-button>
                 </md-list-item>
             </md-list>
 
         </md-sidenav>
 
-        <md-content id="content" class="lightgreen" flex> Hellow World</md-content> 
+        <div ng-view></div>
+
 
     </div>
 
 
 
-        
-    <style>
-        lightblue{background-color:lightblue;}
-        lightgreen{background-color:lightgreen}
-    </style>
+       
 
 
 
     <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
     <script src="Scripts/angular-animate.min.js"></script>
     <script src="Scripts/angular-aria.min.js"></script>
     <script src="Scripts/angular-material.min.js"></script>
 
     <script src="Client/Modules/AppModule.js"></script>
-    <script src="Client/Controllers/SideNavController.js"></script>
+    <script src="Client/Controllers/CreateClassRoomController.js"></script>
+    <script src="Client/Controllers/TeacherHomeController.js"></script>
+    <script src="Client/Controllers/TeacherPageController.js"></script>
+    <script src="Client/Controllers/TeacherClassRoomController.js"></script>
+
+    <script src="Client/Views/TeacherHomeView.html"></script>
+    <script src="Client/Views/TeacherClassRoomView.html"></script>
+    <script src="Client/Views/CreateClassRoomView.html"></script>
+
+
+
 </body>
 </html>
 
