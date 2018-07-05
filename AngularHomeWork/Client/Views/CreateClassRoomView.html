@@ -1,1 +1,12 @@
-﻿<h1>Create Class Room</h1>
+﻿
+<body ng-controller="createClassRoomController" >
+    <h1 layout-margin>Create Class Room</h1>
+    <form>
+        <md-input-container layout-margin>
+            <label>Enter New ClassRoom Name</label>
+            <input type="text" ng-model="newName" required md-maxlength="20" />
+        </md-input-container>
+        <button ng-click="goBtnClicked()">Go</button>
+    </form>
+   
+</body>

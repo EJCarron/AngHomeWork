@@ -1,7 +1,7 @@
 ﻿(function(app){
 
     var TeacherPageController = function($scope, $mdSidenav ){
-
+       
 
     }
 

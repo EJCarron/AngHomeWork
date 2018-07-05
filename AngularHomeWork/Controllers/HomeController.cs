@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using Newtonsoft.Json;
 
 using AngularHomeWork.Models;
 
@@ -20,6 +21,8 @@ namespace AngularHomeWork.Controllers {
         }
 
         public ActionResult Teacher(int id) {
+
+
 
             UserResponse response = TheDataStore.FetchTeacher(id);
 

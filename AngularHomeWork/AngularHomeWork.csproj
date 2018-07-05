@@ -86,6 +86,8 @@
     <Folder Include="Client\Controllers\" />
     <Folder Include="Client\Services\" />
     <Folder Include="Client\Views\" />
+    <Folder Include="Marshalling Objects\" />
+    <Folder Include="Client\Marshalling\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="TheDataStore.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Controllers\ClassRoomController.cs" />
+    <Compile Include="Marshalling Objects\testMarshalObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -139,6 +142,9 @@
     <Content Include="Client\Views\CreateClassRoomView.html" />
     <Content Include="Client\Controllers\TeacherClassRoomController.js" />
     <Content Include="Client\Views\TeacherClassRoomView.html" />
+    <Content Include="Client\Services\TestModelCommandService.js" />
+    <Content Include="Client\Marshalling\testMarshasl.js" />
+    <Content Include="Views\Shared\sidebar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

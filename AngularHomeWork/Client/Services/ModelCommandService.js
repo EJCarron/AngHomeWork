@@ -1,71 +1,31 @@
-﻿"use strict";
+﻿
 
-var mcs={};   // Model Command Service -  handles model changes cmds - via the http mid tier
+(function(app) {
 
-(function(){
 
-    this.modelCommandServiceFactory = function ($scope,$http){
+    var ModelCommand = function($http) {
+        this.createClassroom = function(newCR, cRs) {
 
-        return {
-      
-            createClassroom : function (modelPartsReq,name){
+            $http({
+                method : "POST",
+                data : {
+                    hello : "hello1",
+                    world : "world1"
+                },
+                url : "http://127.0.0.1:8080/ClassRoom/Create"
+            }).then(function success(response) {
+                
+            }, function error(response) {
+                
+            });
 
-                var requestData = {
-                    modelPartsReq : modelPartsReq,
-                    name : name,
-                                  
-                }
-
-                $http({
-                    method: 'POST',
-                    url:'ClassRoom/Create',
-                    data: requestData
-                    
-                }).then(
-                    function successCallback(response){
-                        mum.modelPartsUpdate($scope,response.data.modelUpdates);
-                    },
-                    function errorCallback(response){
-                    
-                    }
-                 );
-
-           }
         }
     }
 
-}).call(mcs);
+    app.service('modelCommand',['$http', ModelCommand]);
+
+}(angular.module("app")));
 
 
 
 
-var mum = {}; // Model Update Mechansim - handles generic model updates
-
-(function(){
-
-    this.ModelPartsReq = function(){
-    
-    }
-
-    this.modelPartsUpdate = function(modelUpdates,$scope){
-
-        for (var i = 0;i<modeUpdates.length;i++){
-            var modelUpdate = modelUpdates[i];
-
-
-            switch (modelUpdate.type){
-                case 'selectedClassroom' :{
-                    $scope.selectedClassroom = modelUpdate.data;
-                }break;
-
-                case 'classRoomNames' :{
-                    $scope.classRoomNames = modelUpdate.data;
-                }break;
-
-            }
-        }
-
-
-    }
-
-}).call(mum);
