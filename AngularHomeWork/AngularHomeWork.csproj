@@ -103,6 +103,8 @@
     <Compile Include="Response.cs" />
     <Compile Include="Controllers\ClassRoomController.cs" />
     <Compile Include="Marshalling Objects\testMarshalObject.cs" />
+    <Compile Include="Models\CreateClassRoomViewModel.cs" />
+    <Compile Include="Models\TeacherHomeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -145,6 +147,8 @@
     <Content Include="Client\Services\TestModelCommandService.js" />
     <Content Include="Client\Marshalling\testMarshasl.js" />
     <Content Include="Views\Shared\sidebar.cshtml" />
+    <Content Include="Views\ClassRoom\Create.cshtml" />
+    <Content Include="Views\Shared\toolbar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

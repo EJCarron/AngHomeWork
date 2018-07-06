@@ -11,14 +11,20 @@ using AngularHomeWork.Models;
 namespace AngularHomeWork.Controllers {
     public class ClassRoomController : Controller {
 
-        public ActionResult Index(){
-            
-        }
+        //public ActionResult Index(){
+                
+        //}
 
-        public ActionResult Create(){
+        public ActionResult Create(int id){
 
-          
-            return Json(new { hello = "world" });
+            UserResponse response = TheDataStore.FetchTeacher(id);
+
+            Teacher teacher = (Teacher)response.user;
+
+            CreateClassRoomView CCRV = new CreateClassRoomView(teacher);
+
+            return View(CCRV);
+
         }
     }
 }

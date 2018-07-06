@@ -28,7 +28,9 @@ namespace AngularHomeWork.Controllers {
 
             Teacher teacher = (Teacher)response.user;
 
-            return View(teacher);
+            TeacherHomeViewModel tHVM = new TeacherHomeViewModel(teacher);
+
+            return View(tHVM);
         }
     }
 }

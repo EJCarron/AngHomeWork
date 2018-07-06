@@ -8,13 +8,13 @@
                             max-width: 10em !important;">
     <md-list>
         <md-list-item>
-            <md-button href="#!TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
+            <md-button href ="/Home/Teacher" class="md-accent md-raised md-hue-1">Home</md-button>
         </md-list-item>
         <md-list-item ng-repeat="classRoom in classRooms">
-            <md-button href="#!TeacherClassRoom">{{classRoom}}</md-button>
+            <md-button>{{classRoom}}</md-button>
         </md-list-item>
         <md-list-item>
-            <md-button href="#!CreateClassRoom" class="md-fab">+</md-button>
+            <md-button href="/ClassRoom/Create/@Model.teacher.id" class="md-fab">+</md-button>
         </md-list-item>
     </md-list>
 

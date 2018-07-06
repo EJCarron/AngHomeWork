@@ -3,30 +3,31 @@
 }
 
 @using AngularHomeWork.Models
-@model AngularHomeWork.Models.Teacher
+@model AngularHomeWork.Models.TeacherHomeViewModel
 
 <!DOCTYPE html>
 <html>
 <head>
    
     <meta chrset="UTF 8">
-    <link rel="stylesheet" href="css/angular-material.css" />
+    <link rel="stylesheet" href="/css/angular-material.css" />
     <title>Teacher</title>
 </head>
 
 
 
 
-<body ng-app="app"  ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'" layout="column">
+<body ng-app="app"  ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.teacher.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.teacher.name'" layout="column">
     
-    <md-toolbar class="md-primary" >
-        <p layout-margin>{{teacherName}}</p>
-    </md-toolbar>
+    @Html.Partial("toolbar")
 
     <div class="container" layout="row" flex>
-        
 
-        <div ng-view></div>
+
+        @Html.Partial("sidebar")
+
+
+        <div> HOME</div>
 
 
     </div>
@@ -37,25 +38,17 @@
 
 
 
-    <script src="Scripts/angular.min.js"></script>
-    <script src="Scripts/angular-route.min.js"></script>
-    <script src="Scripts/angular-animate.min.js"></script>
-    <script src="Scripts/angular-aria.min.js"></script>
-    <script src="Scripts/angular-material.min.js"></script>
+    <script src="/Scripts/angular.min.js"></script>
+    <script src="/Scripts/angular-route.min.js"></script>
+    <script src="/Scripts/angular-animate.min.js"></script>
+    <script src="/Scripts/angular-aria.min.js"></script>
+    <script src="/Scripts/angular-material.min.js"></script>
 
 
-    <script src="Client/Modules/AppModule.js"></script>
-
-    <script src="Client/Controllers/CreateClassRoomController.js"></script>
-    <script src="Client/Controllers/TeacherHomeController.js"></script>
-    <script src="Client/Controllers/TeacherPageController.js"></script>
-    <script src="Client/Controllers/TeacherClassRoomController.js"></script>
-
-    <script src="Client/Views/TeacherHomeView.html"></script>
-    <script src="Client/Views/TeacherClassRoomView.html"></script>
-    <script src="Client/Views/CreateClassRoomView.html"></script>
-
-    <script src="Client/Services/ModelCommandService.js"></script>
+    <script src="/Client/Modules/AppModule.js"></script>
+   
+    <script src="/Client/Controllers/TeacherPageController.js"></script>
+   
 
 </body>
 </html>
