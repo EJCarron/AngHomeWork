@@ -189,5 +189,80 @@ namespace AngularHomeWork {
             return classRooms;
 
         }
+
+
+        public static ClassRoomResponse FetchClassRoom(string name){
+            ClassRoomResponse classRoomResponse = new ClassRoomResponse();
+
+
+
+            Collection<AssignmentListItem> assignments = getAssignmentListItems(classRoomResponse.response, name);
+
+            AssignmentListItem[] arrayOfALs = new AssignmentListItem[assignments.Count];
+
+            assignments.CopyTo(arrayOfALs, 0);
+
+            classRoomResponse.classRoom = new ClassRoom(name, arrayOfALs);
+
+            return classRoomResponse;
+
+        }
+
+        private static Collection<AssignmentListItem> getAssignmentListItems(Response response, string name){
+
+            Collection<AssignmentListItem> assignments = new Collection<AssignmentListItem>();
+
+            SELECT select = new SELECT()
+                .col(Assignments.assignmentId)
+                .col(Assignments.assignmentName)
+                .col(Assignments.dueDate)
+                .FROM(Tables.Assignments)
+                .WHERE(new OperatorExpression()
+                       .addExpression(Assignments.classRoomName)
+                       .Equals()
+                       .addExpression(new StringLiteral(name)));
+                                
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    AssignmentListItem assignmentListItem = new AssignmentListItem();
+
+
+                    assignmentListItem.id = reader.GetInt32(Assignments.assignmentId);
+
+                    assignmentListItem.name = reader.GetString(Assignments.assignmentName);
+
+
+                    assignmentListItem.dueDate =   Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d");
+                   
+
+                    assignments.Add(assignmentListItem);
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            return assignments;
+        }
+
     }
 }

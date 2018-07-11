@@ -11,20 +11,47 @@ using AngularHomeWork.Models;
 namespace AngularHomeWork.Controllers {
     public class ClassRoomController : Controller {
 
-        //public ActionResult Index(){
-                
+        //public ActionResult Index(int id, string classRoomName){
+
+        //    //Get Teacher Data
+        //    UserResponse teacherResponse = TheDataStore.FetchTeacher(id);
+
+        //    Teacher teacher = (Teacher)teacherResponse.user;
+
+
+        //    //Get classRoom data
+        //    ClassRoomResponse classRoomResponse = TheDataStore.FetchClassRoom(classRoomName);
+
+        //    ClassRoom classRoom = classRoomResponse.classRoom;
+
+        //    // make view model
+
+        //    TeacherClassRoomViewModel tCRVM = new TeacherClassRoomViewModel(teacher, classRoom);
+
+        //    // return view
+
+        //    return View(tCRVM);
         //}
 
-        public ActionResult Create(int id){
+        //[HttpPost]
+        //public ActionResult New(CreateClassRoomModel model){
 
-            UserResponse response = TheDataStore.FetchTeacher(id);
+        //    Console.Write(model);
 
-            Teacher teacher = (Teacher)response.user;
+        //    return Json(new { });
+        //}
 
-            CreateClassRoomView CCRV = new CreateClassRoomView(teacher);
 
-            return View(CCRV);
+        //public ActionResult Create(int id){
 
-        }
+        //    UserResponse response = TheDataStore.FetchTeacher(id);
+
+        //    Teacher teacher = (Teacher)response.user;
+
+        //    CreateClassRoomView CCRV = new CreateClassRoomView(teacher);
+
+        //    return View(CCRV);
+
+        //}
     }
 }

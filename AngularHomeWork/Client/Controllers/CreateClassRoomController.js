@@ -1,11 +1,12 @@
 ﻿
 (function(app){
 
-    var CreateClassRoomController = function($scope ){
+    var CreateClassRoomController = function($scope, $http ){
        
 
         $scope.goBtnClicked = function() {
 
+           
 
         }
     }

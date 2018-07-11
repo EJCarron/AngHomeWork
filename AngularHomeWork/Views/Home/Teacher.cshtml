@@ -3,7 +3,7 @@
 }
 
 @using AngularHomeWork.Models
-@model AngularHomeWork.Models.TeacherHomeViewModel
+@model AngularHomeWork.Models.Teacher
 
 <!DOCTYPE html>
 <html>
@@ -17,38 +17,63 @@
 
 
 
-<body ng-app="app"  ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.teacher.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.teacher.name'" layout="column">
-    
-    @Html.Partial("toolbar")
+<body ng-app="app" ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'" layout="column">
+
+    <md-toolbar class="md-primary">
+        <p layout-margin>{{teacherName}}</p>
+    </md-toolbar>
 
     <div class="container" layout="row" flex>
 
+        <md-sidenav class="lightblue"
+                    md-component-id="left"
+                    md-is-locked-open="true"
+                    md-whiteframe="5"
+                    style=" min-width: 10em !important;
+                            width: 50vw !important;
+                            max-width: 10em !important;">
+            <md-list>
+                <md-list-item>
+                    <md-button href ="#!/TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
+                </md-list-item>
+                <md-list-item  ng-repeat="classRoom in classRooms">
+                    <md-button ng-click="classRoomClicked({{classRoom}})">{{classRoom}}</md-button>
+                </md-list-item>
+                <md-list-item>
+                    <md-button href="#!/CreateClassRoom" class="md-fab" >+</md-button>
+                </md-list-item>
+            </md-list>
+        </md-sidenav>
 
-        @Html.Partial("sidebar")
 
-
-        <div> HOME</div>
+        <div ng-view> </div>
 
 
     </div>
 
 
 
-       
 
 
 
-    <script src="/Scripts/angular.min.js"></script>
-    <script src="/Scripts/angular-route.min.js"></script>
-    <script src="/Scripts/angular-animate.min.js"></script>
-    <script src="/Scripts/angular-aria.min.js"></script>
-    <script src="/Scripts/angular-material.min.js"></script>
+
+<script src="/Scripts/angular.min.js"></script>
+<script src="/Scripts/angular-route.min.js"></script>
+<script src="/Scripts/angular-animate.min.js"></script>
+<script src="/Scripts/angular-aria.min.js"></script>
+<script src="/Scripts/angular-material.min.js"></script>
 
 
-    <script src="/Client/Modules/AppModule.js"></script>
-   
-    <script src="/Client/Controllers/TeacherPageController.js"></script>
-   
+<script src="/Client/Modules/AppModule.js"></script>
+
+<script src="/Client/Controllers/TeacherPageController.js"></script>
+<script src="/Client/Controllers/TeacherHomeController.js"></script>
+<script src="/Client/Controllers/TeacherClassRoomController.js"></script>
+<script src="/Client/Controllers/CreateClassRoomController.js"></script>    
+
+<script src="/Client/Views/TeacherClassRoomView.html"></script>
+<script src="/Client/Views/TeacherHomeView.html"></script>
+<script src="/Client/Views/CreateClassRoomView.html"></script>
 
 </body>
 </html>

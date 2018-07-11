@@ -22,15 +22,11 @@ namespace AngularHomeWork.Controllers {
 
         public ActionResult Teacher(int id) {
 
-
-
             UserResponse response = TheDataStore.FetchTeacher(id);
 
             Teacher teacher = (Teacher)response.user;
 
-            TeacherHomeViewModel tHVM = new TeacherHomeViewModel(teacher);
-
-            return View(tHVM);
+            return View(teacher);
         }
     }
 }

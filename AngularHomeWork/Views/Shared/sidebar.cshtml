@@ -11,7 +11,7 @@
             <md-button href ="/Home/Teacher" class="md-accent md-raised md-hue-1">Home</md-button>
         </md-list-item>
         <md-list-item ng-repeat="classRoom in classRooms">
-            <md-button>{{classRoom}}</md-button>
+            <md-button href="/ClassRoom/Index/@Model.teacher.id/{{classRoom}}">{{classRoom}}</md-button>
         </md-list-item>
         <md-list-item>
             <md-button href="/ClassRoom/Create/@Model.teacher.id" class="md-fab">+</md-button>

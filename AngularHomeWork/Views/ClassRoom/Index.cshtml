@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+}
+
+@using AngularHomeWork.Models
+@model AngularHomeWork.Models.TeacherClassRoomViewModel
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta chrset="UTF 8">
+    <link rel="stylesheet" href="/css/angular-material.css" />
+    <title>Index</title>
+</head>
+<body 
+    ng-app="app" 
+    ng-controller="teacherClassRoomController" 
+    ng-init=
+        "
+        classRooms = @Html.Raw(Json.Encode(Model.teacher.classRoomNames).Replace("\"", "'")) ; 
+        teacherName = '@Model.teacher.name' ;
+        assignments = @Html.Raw(Json.Encode(Model.classRoom.assignments).Replace("\"" ,"'"))
+        " 
+    layout="column"
+    >
+
+    @Html.Partial("toolbar")
+
+    <div class="container" layout="row" flex>
+        
+        @Html.Partial("sidebar")
+
+
+        <div>
+            @Model.classRoom.name
+
+            <md-list>
+                <md-list-item ng-repeat="assignment in assignments" layout="row">
+                    <md-button href="/Assignment/Index/{{assignment.id}}"> {{assignment.name}} {{assignment.dueDate}} </md-button>
+                </md-list-item>
+                <md-list-item>
+                    <md-button href="/Assignment/Create/@Model.classRoom.name" class="md-fab">+</md-button>
+                </md-list-item>
+            </md-list>
+        </div>
+
+    </div>
+
+
+    <script src="/Scripts/angular.min.js"></script>
+    <script src="/Scripts/angular-route.min.js"></script>
+    <script src="/Scripts/angular-animate.min.js"></script>
+    <script src="/Scripts/angular-aria.min.js"></script>
+    <script src="/Scripts/angular-material.min.js"></script>
+    <script src="/Client/Modules/AppModule.js"></script>
+    <script src="/Client/Controllers/TeacherClassRoomController.js"></script>
+
+</body>
+</html>
