@@ -17,7 +17,12 @@
 
 
 
-<body ng-app="app" ng-controller="teacherPageController" ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'" layout="column">
+<body 
+    ng-app="app" 
+    ng-controller="teacherPageController" 
+    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; " 
+    layout="column"
+>
 
     <md-toolbar class="md-primary">
         <p layout-margin>{{teacherName}}</p>
@@ -37,7 +42,7 @@
                     <md-button href ="#!/TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
                 </md-list-item>
                 <md-list-item  ng-repeat="classRoom in classRooms">
-                    <md-button ng-click="classRoomClicked({{classRoom}})">{{classRoom}}</md-button>
+                    <md-button ng-click="classRoomClicked(classRoom)" href="#!/TeacherClassRoom/{{classRoom}}">{{classRoom}}</md-button>
                 </md-list-item>
                 <md-list-item>
                     <md-button href="#!/CreateClassRoom" class="md-fab" >+</md-button>
@@ -45,8 +50,8 @@
             </md-list>
         </md-sidenav>
 
+        <div ng-view></div>
 
-        <div ng-view> </div>
 
 
     </div>
@@ -66,6 +71,8 @@
 
 <script src="/Client/Modules/AppModule.js"></script>
 
+<script src="/Client/Services/TestModelCommandService.js"></script>
+
 <script src="/Client/Controllers/TeacherPageController.js"></script>
 <script src="/Client/Controllers/TeacherHomeController.js"></script>
 <script src="/Client/Controllers/TeacherClassRoomController.js"></script>
@@ -74,6 +81,8 @@
 <script src="/Client/Views/TeacherClassRoomView.html"></script>
 <script src="/Client/Views/TeacherHomeView.html"></script>
 <script src="/Client/Views/CreateClassRoomView.html"></script>
+
+
 
 </body>
 </html>

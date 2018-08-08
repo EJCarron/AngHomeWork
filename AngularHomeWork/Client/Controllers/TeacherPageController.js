@@ -1,11 +1,12 @@
 ﻿(function(app){
 
-    var TeacherPageController = function($scope, $mdSidenav, testModelCommand, $location ){
+    var TeacherPageController = function($scope, $mdSidenav, testModelCommand, $location , $rootScope){
 
-        $scope.classRoomClicked() = function(classRoomName) {
-            $scope.selectedClassRoom = testModelCommand.getClassRoom(classRoomName);
+        $scope.classRoomClicked = function(classRoomName) {
+            $rootScope.selectedClassRoom = testModelCommand.getClassRoom(classRoomName);
 
-            $location.path("/TeacherClassRoom")
+            
+
         }
     }
     app.controller("teacherPageController", TeacherPageController);

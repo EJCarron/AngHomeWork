@@ -1,11 +1,11 @@
 ﻿
 (function(app){
 
-    var TeacherClassRoomController = function($scope, $rootScope ){
+    var TeacherClassRoomController = function($scope, $rootScope, $routeParams ){
 
-        $scope.name = $rootScope.selectedClassRoom.name;
+        $scope.name = $routeParams.name;
 
-        
+        $scope.classRoom = $rootScope.selectedClassRoom;
 
     }
 

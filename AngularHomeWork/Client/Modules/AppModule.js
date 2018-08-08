@@ -13,7 +13,7 @@ app.config(['$routeProvider',
             templateUrl: 'Client/Views/CreateClassRoomView.html',
             controller: 'createClassRoomController'
         }).
-        when("/TeacherClassRoom", {
+        when("/TeacherClassRoom/:name", {
             templateUrl: 'Client/Views/TeacherClassRoomView.html',
             controller: 'teacherClassRoomController'
         }).

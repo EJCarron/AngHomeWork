@@ -16,11 +16,11 @@
                 name : classRoomName ,
                 assignments : [
                     {
-                        title: essay,
+                        title: "essay",
                         dueDate: "1/12/18"
                         },
                     {
-                        title: worksheet,
+                        title: "worksheet",
                         dueDate: "2/8/18"
                     }
                     ]            
