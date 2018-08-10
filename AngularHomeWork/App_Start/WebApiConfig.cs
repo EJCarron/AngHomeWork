@@ -13,6 +13,13 @@ namespace AngularHomeWork {
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "GetClassRoom",
+                routeTemplate: "api/ClassRoom/get/{classRoomName}",
+                defaults: new { controller = "ClassRoom", classRoomName = RouteParameter.Optional }
+            );
+
         }
     }
 }

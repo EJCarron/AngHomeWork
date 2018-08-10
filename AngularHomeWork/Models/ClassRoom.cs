@@ -12,18 +12,14 @@ namespace AngularHomeWork.Models {
     }
 
     public class AssignmentListItem{
-        public string name;
+        public string title;
         public string dueDate;
         public int id;
 
     }
 
-    public class ClassRoomResponse{
+    public class ClassRoomResponse : DataResponse{
         public ClassRoom classRoom;
-        public Response response;
 
-        public ClassRoomResponse(){
-            this.response = new Response();
-        }
     }
 }

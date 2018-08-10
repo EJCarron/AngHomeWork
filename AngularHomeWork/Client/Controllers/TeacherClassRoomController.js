@@ -5,7 +5,7 @@
 
         $scope.name = $routeParams.name;
 
-        $scope.classRoom = $rootScope.selectedClassRoom;
+        $scope.assignments = $rootScope.selectedClassRoom.assignments;
 
     }
 

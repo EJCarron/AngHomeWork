@@ -1,9 +1,9 @@
 ﻿(function(app){
 
-    var TeacherPageController = function($scope, $mdSidenav, testModelCommand, $location , $rootScope){
+    var TeacherPageController = function($scope, $mdSidenav, modelCommand, $location , $rootScope){
 
         $scope.classRoomClicked = function(classRoomName) {
-            $rootScope.selectedClassRoom = testModelCommand.getClassRoom(classRoomName);
+            $rootScope.selectedClassRoom = modelCommand.getClassRoom(classRoomName);
 
             
 

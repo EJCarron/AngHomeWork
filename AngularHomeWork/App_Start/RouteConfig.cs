@@ -24,17 +24,18 @@ namespace AngularHomeWork {
                 defaults: new { controller = "ClassRoom", action = "New" }
             );
 
-            routes.MapRoute(
-                name: "IndexClassRoom",
-                url: "ClassRoom/Index/{id}/{classRoomName}",
-                defaults: new { controller = "ClassRoom", action = "Index", id = UrlParameter.Optional , classRoomName = UrlParameter.Optional}
-            );
+
 
             //routes.MapRoute(
-            //    name: "Teacher",
-            //    url: "{controller}/Teacher/{id}",
-            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //    name: "IndexClassRoom",
+            //    url: "ClassRoom/Index",
+            //    defaults: new { controller = "ClassRoom", action = "Index" }
             //);
+            routes.MapRoute(
+                name: "Teacher",
+                url: "{controller}/Teacher/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }

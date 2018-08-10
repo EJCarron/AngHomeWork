@@ -2,6 +2,15 @@
 namespace AngularHomeWork {
     //--------------------RESPONSES-------------------------
 
+
+    public class DataResponse{
+        public Response response;
+
+        public DataResponse(){
+            this.response = new Response();
+        }
+    }
+
     public enum ResponseState {
         ok = 0,
         error = 1,

@@ -20,6 +20,17 @@
             });
 
         }
+
+        this.getClassRoom = function(cRName) {
+            $http({
+                method : "GET",
+                url : ("http://127.0.0.1:8080/api/ClassRoom/get/"+cRName)
+                }).then(function success(response) {
+
+                    return response.data
+                    
+                });
+        }
     }
 
     app.service('modelCommand',['$http', ModelCommand]);

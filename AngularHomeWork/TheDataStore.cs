@@ -9,9 +9,35 @@ using MySql.Data;
 using System.Web;
 using System.IO;
 using System.Data;
+using AngularHomeWork.MarshallingObjects;
 namespace AngularHomeWork {
 
     public static class TheDataStore {
+
+        //----------------------Sub request sorter----------------------------
+
+        public static DataResponse getData(SubRequest request){
+
+
+            DataResponse dataResponse = null;
+
+            switch (request.requestType){
+                case RequestType.assignmentsForClassRoom:
+                    dataResponse = FetchClassRoom(request);
+                    break;
+            }
+
+
+            return dataResponse;
+        }
+
+
+
+
+        //--------------------Database calls----------------------------
+
+
+
 
         public static UserResponse FetchTeacher(int teacherId) {
             UserResponse userResponse = new UserResponse();
@@ -190,8 +216,14 @@ namespace AngularHomeWork {
 
         }
 
+        //public static Response createClassRoom(string name, int teacherId){
+            
+        //}
 
-        public static ClassRoomResponse FetchClassRoom(string name){
+        public static ClassRoomResponse FetchClassRoom(SubRequest request){
+
+            string name = request.name;
+
             ClassRoomResponse classRoomResponse = new ClassRoomResponse();
 
 
@@ -243,7 +275,7 @@ namespace AngularHomeWork {
 
                     assignmentListItem.id = reader.GetInt32(Assignments.assignmentId);
 
-                    assignmentListItem.name = reader.GetString(Assignments.assignmentName);
+                    assignmentListItem.title = reader.GetString(Assignments.assignmentName);
 
 
                     assignmentListItem.dueDate =   Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d");
@@ -262,6 +294,12 @@ namespace AngularHomeWork {
             conn.Close();
 
             return assignments;
+        }
+
+        public static Response createClassRoom(int teacherId, string classRoomName){
+            Response response = new Response();
+
+            return response;
         }
 
     }
