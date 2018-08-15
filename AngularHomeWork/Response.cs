@@ -1,13 +1,16 @@
 ﻿using System;
+using AngularHomeWork.MarshallingObjects;
 namespace AngularHomeWork {
     //--------------------RESPONSES-------------------------
 
 
     public class DataResponse{
         public Response response;
+        public ResponseObject responseObject;
 
-        public DataResponse(){
-            this.response = new Response();
+        public DataResponse(ResponseObject responseObject, Response response){
+            this.response = response;
+            this.responseObject = responseObject;
         }
     }
 

@@ -6,6 +6,9 @@ namespace AngularHomeWork {
 
     public enum RequestType {
             none = 0,
-            assignmentsForClassRoom = 1
+            classRoom = 1,
+            classRoomList = 2
     }
+
+
 }

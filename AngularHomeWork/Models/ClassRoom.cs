@@ -18,8 +18,5 @@ namespace AngularHomeWork.Models {
 
     }
 
-    public class ClassRoomResponse : DataResponse{
-        public ClassRoom classRoom;
 
-    }
 }

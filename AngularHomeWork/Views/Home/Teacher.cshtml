@@ -20,7 +20,7 @@
 <body 
     ng-app="app" 
     ng-controller="teacherPageController" 
-    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; " 
+    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; teacherId=@Model.id ;" 
     layout="column"
 >
 
@@ -42,7 +42,7 @@
                     <md-button href ="#!/TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
                 </md-list-item>
                 <md-list-item  ng-repeat="classRoom in classRooms">
-                    <md-button ng-click="classRoomClicked(classRoom)" href="#!/TeacherClassRoom/{{classRoom}}">{{classRoom}}</md-button>
+                    <md-button ng-click="classRoomBtnClicked(classRoom)" href="#!/TeacherClassRoom/{{classRoom}}">{{classRoom}}</md-button>
                 </md-list-item>
                 <md-list-item>
                     <md-button href="#!/CreateClassRoom" class="md-fab" >+</md-button>
@@ -72,6 +72,7 @@
 <script src="/Client/Modules/AppModule.js"></script>
 
 <script src="/Client/Services/ModelCommandService.js"></script>
+<script src="/Client/Services/NullObjects.js"></script>
 
 <script src="/Client/Controllers/TeacherPageController.js"></script>
 <script src="/Client/Controllers/TeacherHomeController.js"></script>

@@ -1,11 +1,15 @@
 ﻿
 (function(app){
 
-    var TeacherClassRoomController = function($scope, $rootScope, $routeParams ){
+    var TeacherClassRoomController = function($scope,  $routeParams , modelCommand){
 
         $scope.name = $routeParams.name;
 
-        $scope.assignments = $rootScope.selectedClassRoom.assignments;
+        $scope.$watch('selectedClassRoom', function(newValue, oldValue) {
+
+            $scope.classRoom = newValue;
+           
+        });
 
     }
 

@@ -2,7 +2,8 @@
 namespace AngularHomeWork.MarshallingObjects {
     public class RequestObject {
         public SubRequest[] subRequests;
-        public RequestObject() {
+        public RequestObject(params SubRequest[] subRequests) {
+            this.subRequests = subRequests;
         }
     }
 
@@ -17,6 +18,24 @@ namespace AngularHomeWork.MarshallingObjects {
         }
       
     }
+
+    public class ResponseObject{
+        public SubResponse[] subResponses;
+
+        public ResponseObject(SubResponse[] subResponses){
+            this.subResponses = subResponses;
+        }
+    }
+
+
+    public class SubResponse{
+        public RequestType requestType;
+
+        public object modelObject;
+    }
+
+
+
 
     //public class SubRequest_ClassRoom : SubRequest{
     //    public string classRoomName;

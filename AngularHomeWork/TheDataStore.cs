@@ -18,22 +18,51 @@ namespace AngularHomeWork {
 
         public static DataResponse getData(SubRequest request){
 
+            RequestObject requestObject = new RequestObject(request);
 
-            DataResponse dataResponse = null;
+            return getData(requestObject);
+        }
 
-            switch (request.requestType){
-                case RequestType.assignmentsForClassRoom:
-                    dataResponse = FetchClassRoom(request);
-                    break;
+
+        public static DataResponse getData(RequestObject request){
+            
+            SubRequest[] subRequests = request.subRequests;
+
+            Response response = new Response();
+
+            int numRequests = subRequests.Length;
+
+            SubResponse[] subResponses = new SubResponse[numRequests];
+
+
+            for (int i = 0; i < numRequests; i++) {
+
+                if (response.isOk) {
+
+                    subResponses[i] = getSubResponse(subRequests[i], response);
+                }
             }
 
+            ResponseObject responseObject = new ResponseObject(subResponses);
+                                                                 
+            DataResponse dataResponse = new DataResponse(responseObject, response);
 
             return dataResponse;
         }
 
+        private static SubResponse getSubResponse(SubRequest request, Response response){
 
 
+            SubResponse subResponse = null;
 
+            switch (request.requestType) {
+                case RequestType.classRoom:
+                    subResponse = FetchClassRoom(request, response);
+                    break;
+            }
+
+            return subResponse;
+        }
         //--------------------Database calls----------------------------
 
 
@@ -220,23 +249,24 @@ namespace AngularHomeWork {
             
         //}
 
-        public static ClassRoomResponse FetchClassRoom(SubRequest request){
+        public static SubResponse FetchClassRoom(SubRequest request, Response response){
+
+            SubResponse subResponse = new SubResponse();
+
 
             string name = request.name;
 
-            ClassRoomResponse classRoomResponse = new ClassRoomResponse();
-
-
-
-            Collection<AssignmentListItem> assignments = getAssignmentListItems(classRoomResponse.response, name);
+            Collection<AssignmentListItem> assignments = getAssignmentListItems(response, name);
 
             AssignmentListItem[] arrayOfALs = new AssignmentListItem[assignments.Count];
 
             assignments.CopyTo(arrayOfALs, 0);
 
-            classRoomResponse.classRoom = new ClassRoom(name, arrayOfALs);
+            subResponse.modelObject = new ClassRoom(name, arrayOfALs);
 
-            return classRoomResponse;
+            subResponse.requestType = RequestType.classRoom;
+
+            return subResponse;
 
         }
 
@@ -296,8 +326,37 @@ namespace AngularHomeWork {
             return assignments;
         }
 
+
         public static Response createClassRoom(int teacherId, string classRoomName){
             Response response = new Response();
+
+            INSERTINTO insert = new INSERTINTO(Tables.ClassRooms)
+                .ValuePair(ClassRooms.classRoomName, new StringLiteral(classRoomName))
+                .ValuePair(ClassRooms.teacherId, new IntLiteral(teacherId));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
 
             return response;
         }

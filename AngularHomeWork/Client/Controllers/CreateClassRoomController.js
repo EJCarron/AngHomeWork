@@ -6,7 +6,7 @@
 
         $scope.goBtnClicked = function() {
 
-           
+           $scope.$parent.createClassRoom($scope.newName)
 
         }
     }

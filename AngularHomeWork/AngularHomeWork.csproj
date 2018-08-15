@@ -151,6 +151,7 @@
     <Content Include="Views\ClassRoom\Create.cshtml" />
     <Content Include="Views\Shared\toolbar.cshtml" />
     <Content Include="Views\ClassRoom\Index.cshtml" />
+    <Content Include="Client\Services\NullObjects.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

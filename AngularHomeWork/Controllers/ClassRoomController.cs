@@ -14,13 +14,24 @@ namespace AngularHomeWork.Controllers {
         
         [HttpGet]
         public HttpResponseMessage get(string classRoomName){
-            
-            ClassRoomResponse classRoomResponse = (ClassRoomResponse)TheDataStore.getData(new SubRequest(RequestType.assignmentsForClassRoom, classRoomName));
 
-            if(!classRoomResponse.response.isOk){
-                return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, classRoomResponse.response.message);
+
+            //Response response = new Response();
+
+            //ClassRoom classRoom = (ClassRoom)TheDataStore.FetchClassRoom(new SubRequest(RequestType.classRoom, classRoomName), response).modelObject;
+
+            //if (!response.isOk) {
+            //    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
+            //} else {
+            //    return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoom);
+            //}
+
+            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName));
+
+            if(!dataResponse.response.isOk){
+                return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
             }else{
-                return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoomResponse.classRoom);
+                return Request.CreateResponse(System.Net.HttpStatusCode.OK, dataResponse.responseObject);
             }
 
         }
@@ -33,12 +44,15 @@ namespace AngularHomeWork.Controllers {
             if (!response.isOk) {
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
             } else {
-                ClassRoomResponse classRoomResponse = (ClassRoomResponse)TheDataStore.getData(cO.requestObject.subRequests[0]);
 
-                if (!classRoomResponse.response.isOk) {
-                    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, classRoomResponse.response.message);
+
+                DataResponse dataResponse = TheDataStore.getData(cO.requestObject);
+
+
+                if (!dataResponse.response.isOk) {
+                    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
                 } else {
-                    return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoomResponse.classRoom);
+                    return Request.CreateResponse(System.Net.HttpStatusCode.OK, dataResponse.responseObject);
                 }
             }
 
