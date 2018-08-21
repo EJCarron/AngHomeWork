@@ -10,5 +10,11 @@ namespace AngularHomeWork {
             classRoomList = 2
     }
 
+    public enum UserType {
+
+        none = 0,
+        teacher = 1,
+        student = 2
+    }
 
 }

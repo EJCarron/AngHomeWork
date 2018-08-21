@@ -13,6 +13,10 @@ namespace AngularHomeWork.MarshallingObjects {
         public int teacherId;
         public string classRoomName;
 
+    }
 
+    public class ArchiveClassRoomCO : CommandObject{
+        public string classRoomName;
+        public int newArchiveStatus;
     }
 }

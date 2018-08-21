@@ -41,20 +41,18 @@ namespace AngularHomeWork.Controllers {
 
             Response response = TheDataStore.createClassRoom(cO.teacherId, cO.classRoomName);
 
-            if (!response.isOk) {
-                return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
-            } else {
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
+
+        }
+
+        [HttpPut]
+        public HttpResponseMessage archive(ArchiveClassRoomCO cO){
+            
+            Response response = TheDataStore.changeClassRoomArchiveStatus(cO.classRoomName, cO.newArchiveStatus);
 
 
-                DataResponse dataResponse = TheDataStore.getData(cO.requestObject);
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
 
-
-                if (!dataResponse.response.isOk) {
-                    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
-                } else {
-                    return Request.CreateResponse(System.Net.HttpStatusCode.OK, dataResponse.responseObject);
-                }
-            }
 
         }
 

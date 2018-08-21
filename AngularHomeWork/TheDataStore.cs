@@ -10,9 +10,34 @@ using System.Web;
 using System.IO;
 using System.Data;
 using AngularHomeWork.MarshallingObjects;
+using System.Net.Http;
+
 namespace AngularHomeWork {
 
     public static class TheDataStore {
+        
+        //-----------------------Http Response Message ----------------------------
+
+
+        public static HttpResponseMessage makeHttpResponseMessage(Response response, RequestObject requestObject, HttpRequestMessage Request){
+
+            if (!response.isOk) {
+                return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
+            } else {
+
+
+                DataResponse dataResponse = TheDataStore.getData(requestObject);
+
+
+                if (!dataResponse.response.isOk) {
+                    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
+                } else {
+                    return Request.CreateResponse(System.Net.HttpStatusCode.OK, dataResponse.responseObject);
+                }
+            }
+            
+        }
+
 
         //----------------------Sub request sorter----------------------------
 
@@ -58,6 +83,10 @@ namespace AngularHomeWork {
             switch (request.requestType) {
                 case RequestType.classRoom:
                     subResponse = FetchClassRoom(request, response);
+                    break;
+
+                case RequestType.classRoomList:
+                    subResponse = FetchClassRoomList(request, response);
                     break;
             }
 
@@ -138,7 +167,12 @@ namespace AngularHomeWork {
                 .WHERE(new OperatorExpression()
                        .addExpression(ClassRooms.teacherId)
                        .Equals()
-                       .addExpression(new IntLiteral(teacherId)));
+                       .addExpression(new IntLiteral(teacherId))
+                       .AND()
+                       .addExpression(ClassRooms.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
+                      );
 
             //Debug Code------------------------------------------------
 
@@ -190,6 +224,10 @@ namespace AngularHomeWork {
                        .addExpression(ClassRooms.teacherId)
                        .Equals()
                        .addExpression(new IntLiteral(teacherId))
+                       .AND()
+                       .addExpression(ClassRooms.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
                       )
                 .GROUPBY(ClassRooms.classRoomName);
 
@@ -249,7 +287,32 @@ namespace AngularHomeWork {
             
         //}
 
-        public static SubResponse FetchClassRoom(SubRequest request, Response response){
+        private static SubResponse FetchClassRoomList(SubRequest request,Response response){
+
+            SubResponse subResponse = new SubResponse();
+
+            int teacherId = request.id;
+
+            Collection<string> classRoomList = getClassRoomNames(response, teacherId);
+
+            string[] classRoomListArray = new string[classRoomList.Count];
+
+            for (int i = 0; i < classRoomList.Count; i++){
+
+                classRoomListArray[i] = classRoomList[i];
+            }
+
+            subResponse.requestType = RequestType.classRoomList;
+
+            subResponse.modelObject = classRoomListArray;
+
+            return subResponse;
+
+        }
+
+
+
+        private static SubResponse FetchClassRoom(SubRequest request, Response response){
 
             SubResponse subResponse = new SubResponse();
 
@@ -282,7 +345,12 @@ namespace AngularHomeWork {
                 .WHERE(new OperatorExpression()
                        .addExpression(Assignments.classRoomName)
                        .Equals()
-                       .addExpression(new StringLiteral(name)));
+                       .addExpression(new StringLiteral(name))
+                       .AND()
+                       .addExpression(Assignments.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
+                      );
                                 
             //Debug Code------------------------------------------------
 
@@ -359,6 +427,193 @@ namespace AngularHomeWork {
 
 
             return response;
+        }
+
+
+        public static Response changeClassRoomArchiveStatus(string classRoomName, int archiveStatus){
+            Response response = new Response();
+
+            UPDATE update = new UPDATE(Tables.ClassRooms)
+                .addValuePair(ClassRooms.isClosed, new IntLiteral(archiveStatus))
+                .WHEREEQUALS(ClassRooms.classRoomName, new StringLiteral(classRoomName));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            return changeClassRoomAssignmentsArchiveStatus(response, classRoomName, archiveStatus); 
+
+        }
+
+        private static Response changeClassRoomAssignmentsArchiveStatus(Response response, string classRoomName, int archiveStatus){
+
+            UPDATE update = new UPDATE(Tables.Assignments)
+                .addValuePair(Assignments.isClosed, new IntLiteral(archiveStatus))
+                .WHEREEQUALS(Assignments.classRoomName, new StringLiteral(classRoomName));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            return response;
+
+        }
+
+        public static Response changeUserArchiveStatus(int userId, UserType type, int archiveStatus){
+            Response response = new Response();
+
+            UPDATE update = new UPDATE(Tables.Users)
+                .addValuePair(Users.isClosed, new IntLiteral(archiveStatus))
+                .WHEREEQUALS(Users.userId, new IntLiteral(userId));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            if (type == UserType.teacher) {
+                return changeTeacherClassRoomsArchiveStatus(response, userId, archiveStatus);
+            }else{
+                return response;
+            }
+
+
+
+        }
+
+        private static Response changeTeacherClassRoomsArchiveStatus(Response response, int userId, int archiveStatus ){
+
+            UPDATE update = new UPDATE(Tables.ClassRooms)
+                .addValuePair(ClassRooms.isClosed, new IntLiteral(archiveStatus))
+                .WHEREEQUALS(ClassRooms.teacherId, new IntLiteral(userId));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            return changeTeacherAssignmentsArchiveStatus(response, userId, archiveStatus);
+
+        }
+
+        private static Response changeTeacherAssignmentsArchiveStatus(Response response, int userId, int archiveStatus){
+            
+            UPDATE update = new UPDATE(Tables.Assignments)
+                .JOIN(Tables.ClassRooms, new OperatorExpression()
+                      .addExpression(Assignments.classRoomName)
+                      .Equals()
+                      .addExpression(ClassRooms.classRoomName)
+                     )
+                .addValuePair(Assignments.isClosed, new IntLiteral(archiveStatus))
+                .WHEREEQUALS(ClassRooms.teacherId, new IntLiteral(userId));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            return response;
+                
         }
 
     }

@@ -20,6 +20,18 @@ namespace AngularHomeWork {
                 defaults: new { controller = "ClassRoom", classRoomName = RouteParameter.Optional }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "CreateClassRoom",
+                routeTemplate: "api/ClassRoom/create",
+                defaults: new { controller = "ClassRoom" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "ArchiveClassRoom",
+                routeTemplate: "api/ClassRoom/archive",
+                defaults: new { controller = "ClassRoom" }
+            );
+
         }
     }
 }

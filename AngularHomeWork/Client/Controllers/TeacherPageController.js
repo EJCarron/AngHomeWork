@@ -1,6 +1,6 @@
 ﻿(function(app){
 
-    var TeacherPageController = function($scope, $mdSidenav, modelCommand, nullObjects, $location){
+    var TeacherPageController = function($scope, $mdSidenav, modelCommand, nullObjects, magicStrings, $location){
 
         $scope.selectedClassRoom = nullObjects.classRoom;
 
@@ -27,9 +27,15 @@
 
             $scope.setSelectedClassRoom(newName);
             
-            modelCommand.createClassRoom(newName, $scope.teacherId);
+            modelCommand.createClassRoom(newName, $scope.teacherId, $scope);
+
+        }
 
 
+        $scope.archiveClassRoom = function(classRoomName) {
+            $location.path("/TeacherHome");
+
+            modelCommand.changeClassRoomArchiveStatus($scope.teacherId, classRoomName, magicStrings.archiveCode, $scope);
         }
 
     }

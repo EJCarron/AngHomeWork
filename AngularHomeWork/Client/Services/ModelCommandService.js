@@ -3,54 +3,56 @@
 (function(app) {
 
 
-    var ModelCommand = function($http) {
-        this.createClassroom = function(newCR, cRs) {
-
-            $http({
-                method : "POST",
-                data : {
-                    hello : "hello1",
-                    world : "world1"
-                },
-                url : "http://127.0.0.1:8080/ClassRoom/Create"
-            }).then(function success(response) {
-                
-            }, function error(response) {
-                
-            });
-
-        }
-
+    var ModelCommand = function($http, magicStrings) {
+        
         this.getClassRoom = function(cRName, $scope) {
-            $http({
-                method : "GET",
-                url : ("http://127.0.0.1:8080/api/ClassRoom/get/"+cRName)
-                }).then(function success(response) {
 
-                    dealWithGenericResponse(response.data, $scope)
-                   
-                    
-                });
+            doHttpGetRequest(magicStrings.classRoomController, cRName, $scope);
+
         }
 
         this.createClassRoom = function(newName, teacherId, $scope){
 
             var commandObject = makeCreateClassRoomCO(newName, teacherId);
 
+            doHttpRequest(magicStrings.POST, magicStrings.classRoomController, magicStrings.createAction, $scope, commandObject);
+
+        }
+
+        this.changeClassRoomArchiveStatus = function(teacherId, classRoomName, newArchiveStatus, $scope) {
+            var commandObject = makeArchiveClassRoomCO(classRoomName, teacherId, newArchiveStatus);
+
+            doHttpRequest(magicStrings.PUT, magicStrings.classRoomController, magicStrings.archiveAction, $scope, commandObject );
+        }
+
+//-----------------------Http Request--------------------------
+
+
+        var doHttpGetRequest = function(controller, parameter, $scope){
+
             $http({
-                method : "POST",
-                url : ("http://127.0.0.1:8080/api/ClassRoom/create"),
+                method : "GET",
+                url : (magicStrings.URL + controller + "/" + magicStrings.getAction + "/" + parameter)
+                }).then(function success(response) {
+
+                    dealWithGenericResponse(response.data, $scope)
+                  
+                });
+        }
+
+
+        var doHttpRequest = function(method, controller,action, $scope, commandObject){
+
+            $http({
+                method : method,
+                url : (magicStrings.URL + controller + "/" + action),
                 data : commandObject
                 }).then(function success(response) {
 
                     dealWithGenericResponse(response.data, $scope)
                    
-                    
                 });
-
-
         }
-
 
 //----------------------GENERIC RESPONSES ----------------------
 
@@ -66,6 +68,9 @@
 
                     case 1: {
                         classRoomArrived(subResponse, $scope)
+                    }break;
+                    case 2: {
+                        classRoomListArrived(subResponse, $scope)
                     }break;
                         
                 }
@@ -85,6 +90,13 @@
 
         }
 
+        var classRoomListArrived = function(subResponse, $scope){
+
+            var classRoomList = subResponse.modelObject;
+
+            $scope.classRooms = classRoomList;
+        }
+
 //----------------------COMMAND OBJECTS -------------------------------
 
        var makeSubRequest = function(type, name, id){
@@ -102,7 +114,7 @@
        var makeRequestObject = function(subRequests){
 
             var requestObject = {
-                SubRequests: subRequests
+                subRequests: subRequests
             }
 
             return requestObject;
@@ -111,10 +123,10 @@
 
        var makeCreateClassRoomCO = function(newName, teacherId){
             
-            var classRoomListRequest = makeSubRequest(2, null, teacherId);
-            var getClassRoomRequest = makeSubRequest(1, newName, null);
+            var classRoomListRequest = makeSubRequest(2, "", teacherId);
+            var classRoomRequest = makeSubRequest(1, newName, -1);
 
-            var requestObject = makeRequestObject([classRoomListRequest, getClassRoomRequest]);
+            var requestObject = makeRequestObject([classRoomListRequest, classRoomRequest]);
 
             var createClassRoomCO = {
                 requestObject: requestObject,
@@ -126,10 +138,25 @@
 
        }
 
+        var makeArchiveClassRoomCO = function(classRoomName, teacherId, newArchiveStatus) {
+
+            var classRoomListRequest = makeSubRequest(2, "", teacherId);
+
+            var requestObject = makeRequestObject([classRoomListRequest]);
+
+            var archiveClassRoomCO = {
+                requestObject: requestObject,
+                classRoomName: classRoomName,
+                newArchiveStatus: newArchiveStatus
+                }
+
+            return archiveClassRoomCO;
+        }
+
 
     }
 
-    app.service('modelCommand',['$http', ModelCommand]);
+    app.service('modelCommand',['$http','magicStrings', ModelCommand]);
 
 }(angular.module("app")));
 
