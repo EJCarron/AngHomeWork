@@ -17,6 +17,10 @@ app.config(['$routeProvider',
             templateUrl: 'Client/Views/TeacherClassRoomView.html',
             controller: 'teacherClassRoomController'
         }).
+        when("/TeacherAssignmennt/:assignmentId", {
+            templateUrl: 'Client/Views/TeacherAssignmentView.html',
+            controller: 'teacherAssignmentController'
+        }).
         otherwise({
             redirectTo:'/TeacherHome'
         });

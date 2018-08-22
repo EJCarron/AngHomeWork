@@ -106,6 +106,8 @@
     <Compile Include="Models\ClassRoom.cs" />
     <Compile Include="Marshalling Objects\RequestObject.cs" />
     <Compile Include="Marshalling Objects\Command Objects.cs" />
+    <Compile Include="Models\Assignment.cs" />
+    <Compile Include="Controllers\AssignmentController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -153,6 +155,8 @@
     <Content Include="Views\ClassRoom\Index.cshtml" />
     <Content Include="Client\Services\NullObjects.js" />
     <Content Include="Client\Services\MagicStrings.js" />
+    <Content Include="Client\Views\TeacherAssignmentView.html" />
+    <Content Include="Client\Controllers\TeacherAssignmentController.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

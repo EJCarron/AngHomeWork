@@ -25,6 +25,12 @@
             doHttpRequest(magicStrings.PUT, magicStrings.classRoomController, magicStrings.archiveAction, $scope, commandObject );
         }
 
+
+        this.getAssignment = function(assignmentId, $scope){
+
+            doHttpGetRequest(magicStrings.assignmentController, assignmentId, $scope);
+        }
+
 //-----------------------Http Request--------------------------
 
 
@@ -72,7 +78,9 @@
                     case 2: {
                         classRoomListArrived(subResponse, $scope)
                     }break;
-                        
+                    case 3:{
+                        assignmentArrived(subResponse, $scope)
+                    }    
                 }
 
             }
@@ -95,6 +103,16 @@
             var classRoomList = subResponse.modelObject;
 
             $scope.classRooms = classRoomList;
+        }
+
+        var assignmentArrived = function(subResponse, $scope){
+
+            var assignment = subResponse.modelObject;
+
+            if($scope.selectedAssignmentId == assignment.id){
+
+                $scope.selectedAssignment = assignment;
+            }
         }
 
 //----------------------COMMAND OBJECTS -------------------------------

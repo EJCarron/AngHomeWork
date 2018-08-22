@@ -32,6 +32,12 @@ namespace AngularHomeWork {
                 defaults: new { controller = "ClassRoom" }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "GetAssignment",
+                routeTemplate: "api/Assignment/get/{assignmentId}",
+                defaults: new { controller = "Assignment", assignmentId = RouteParameter.Optional }
+            );
+
         }
     }
 }

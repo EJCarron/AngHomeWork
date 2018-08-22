@@ -11,6 +11,14 @@
             name:""
             }
 
+        this.assignment = {
+            id:-1,
+            name:"",
+            classRoomName:"",
+            dueDate:"",
+            description:""
+        }
+
         }
     app.service('nullObjects',[nullObjects]);
 

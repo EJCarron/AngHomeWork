@@ -26,6 +26,14 @@
             });
         };
 
+
+        $scope.assignmentBtnClicked = function(assignmentId){
+
+            $scope.$parent.setSelectedAssignment(assignmentId);
+
+            modelCommand.getAssignment(assignmentId, $scope.$parent);
+        }
+
     }
 
     app.controller("teacherClassRoomController", TeacherClassRoomController);

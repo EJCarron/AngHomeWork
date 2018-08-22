@@ -38,6 +38,14 @@
             modelCommand.changeClassRoomArchiveStatus($scope.teacherId, classRoomName, magicStrings.archiveCode, $scope);
         }
 
+        $scope.setSelectedAssignment = function(assignmentId){
+
+            $scope.selectedAssignmentId = assignmentId;
+
+            $scope.selectedAssignment = nullObjects.assignment;
+        }
+
+
     }
 
     app.controller("teacherPageController", TeacherPageController);

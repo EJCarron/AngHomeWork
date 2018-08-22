@@ -88,6 +88,10 @@ namespace AngularHomeWork {
                 case RequestType.classRoomList:
                     subResponse = FetchClassRoomList(request, response);
                     break;
+
+                case RequestType.assignment:
+                    subResponse = FetchAssignment(request, response);
+                    break;
             }
 
             return subResponse;
@@ -332,6 +336,72 @@ namespace AngularHomeWork {
             return subResponse;
 
         }
+
+        private static SubResponse FetchAssignment(SubRequest request, Response response) {
+
+            SubResponse subResponse = new SubResponse();
+
+            int id = request.id;
+
+            Assignment assignment = new Assignment();
+
+            SELECT select = new SELECT()
+                .col(Assignments.assignmentName)
+                .col(Assignments.classRoomName)
+                .col(Assignments.dueDate)
+                .col(Assignments.description)
+                .FROM(Tables.Assignments)
+                .WHERE(new OperatorExpression()
+                       .addExpression(Assignments.assignmentId)
+                       .Equals()
+                       .addExpression(new IntLiteral(id))
+                       .AND()
+                       .addExpression(Assignments.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+                    assignment.id = id;
+                    assignment.name = reader.GetString(Assignments.assignmentName);
+                    assignment.classRoomName = reader.GetString(Assignments.classRoomName);
+                    assignment.dueDate = Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d");
+                    assignment.description = reader.GetString(Assignments.description);
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            subResponse.modelObject = assignment;
+
+            subResponse.requestType = RequestType.assignment;
+
+            return subResponse;
+
+        }
+
+
 
         private static Collection<AssignmentListItem> getAssignmentListItems(Response response, string name){
 
@@ -615,6 +685,8 @@ namespace AngularHomeWork {
             return response;
                 
         }
+
+
 
     }
 }

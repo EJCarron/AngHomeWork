@@ -10,6 +10,7 @@
         this.URL = "http://127.0.0.1:8080/api/";
 
         this.classRoomController = "ClassRoom";
+        this.assignmentController = "Assignment";
 
         this.archiveAction = "archive";
         this.createAction = "create";

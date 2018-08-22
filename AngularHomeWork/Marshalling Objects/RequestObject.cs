@@ -16,6 +16,11 @@ namespace AngularHomeWork.MarshallingObjects {
             this.requestType = requestType;
             this.name = name;
         }
+
+        public SubRequest(RequestType requestType, int id){
+            this.requestType = requestType;
+            this.id = id;
+        }
       
     }
 
