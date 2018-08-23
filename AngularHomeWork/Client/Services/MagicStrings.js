@@ -15,6 +15,8 @@
         this.archiveAction = "archive";
         this.createAction = "create";
         this.getAction = "get";
+        this.editAction = "edit";
+
 
         this.archiveCode = 1;
         this.unarchiveCode = 0;

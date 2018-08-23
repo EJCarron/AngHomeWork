@@ -31,6 +31,28 @@
             doHttpGetRequest(magicStrings.assignmentController, assignmentId, $scope);
         }
 
+        this.createAssignment = function(newName, classRoomName, newDueDate, newDescription, $scope){
+
+            var commandObject = makeCreateAssignmentCO(newName, classRoomName, newDueDate, newDescription);
+
+            doHttpRequest(magicStrings.POST, magicStrings.assignmentController, magicStrings.createAction, $scope, commandObject);
+
+        }
+
+        this.editAssignment = function(assignment, $scope){
+
+            var commandObject = makeEditAssignmentCO(assignment.id, assignment.name, assignment.dueDate, assignment.description, 0, assignment.classRoomName);
+
+            doHttpRequest(magicStrings.PUT, magicStrings.assignmentController, magicStrings.editAction, $scope, commandObject);
+        }
+
+        this.changeAssignmentArchiveStatus = function(assignment, newArchiveStatus, $scope){
+
+            var commandObject = makeEditAssignmentCO(assignment.id, assignment.name, assignment.dueDate, assignment.description, newArchiveStatus, assignment.classRoomName);
+
+            doHttpRequest(magicStrings.PUT, magicStrings.assignmentController, magicStrings.editAction, $scope, commandObject);
+        }
+
 //-----------------------Http Request--------------------------
 
 
@@ -169,6 +191,43 @@
                 }
 
             return archiveClassRoomCO;
+        }
+
+        var makeCreateAssignmentCO = function(newName, classRoomName, newDueDate, newDescription){
+
+            var classRoomRequest = makeSubRequest(1, classRoomName, -1);
+
+            var requestObject = makeRequestObject([classRoomRequest]);
+
+            var createAssignmentCO = {
+                requestObject: requestObject,
+                newName: newName,
+                classRoomName: classRoomName,
+                newDueDate: newDueDate,
+                newDescription: newDescription
+            }
+
+
+            return createAssignmentCO;
+        }
+
+
+        var makeEditAssignmentCO = function(id, newName, newDueDate, newDescription, newArchiveStatus, classRoomName){
+
+            var assignmentRequest =  makeSubRequest(1,classRoomName,-1);
+
+            var requestObject = makeRequestObject([assignmentRequest]);
+
+            var editAssignmentCO = {
+                requestObject: requestObject,
+                id: id,
+                newName: newName,
+                newDueDate: newDueDate,
+                newDescription: newDescription,
+                newArchiveStatus: newArchiveStatus        
+            }
+
+            return editAssignmentCO; 
         }
 
 

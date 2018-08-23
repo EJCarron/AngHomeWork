@@ -499,6 +499,85 @@ namespace AngularHomeWork {
             return response;
         }
 
+        public static Response createAssignment(string newName, string classRoomName, DateTime newDueDate, string newDescription){
+            Response response = new Response();
+
+
+            INSERTINTO insert = new INSERTINTO(Tables.Assignments)
+                .ValuePair(Assignments.assignmentName, new StringLiteral(newName))
+                .ValuePair(Assignments.classRoomName, new StringLiteral(classRoomName))
+                .ValuePair(Assignments.dueDate, new DateLiteral(newDueDate))
+                .ValuePair(Assignments.description, new StringLiteral(newDescription));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            return response;
+        }
+
+
+        public static Response editAssignment(int id, string newName, DateTime newDueDate, string newDescription, int newArchiveStatus){
+
+            Response response = new Response();
+
+
+
+
+            UPDATE update = new UPDATE(Tables.Assignments)
+                .addValuePair(Assignments.assignmentName, new StringLiteral(newName))
+                .addValuePair(Assignments.dueDate, new DateLiteral(newDueDate))
+                .addValuePair(Assignments.description, new StringLiteral(newDescription))
+                .addValuePair(Assignments.isClosed, new IntLiteral(newArchiveStatus))
+                .WHEREEQUALS(Assignments.assignmentId, new IntLiteral(id));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(update.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = update.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            return response;
+
+        }
+
 
         public static Response changeClassRoomArchiveStatus(string classRoomName, int archiveStatus){
             Response response = new Response();

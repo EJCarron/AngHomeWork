@@ -26,7 +26,7 @@ namespace AngularHomeWork.Controllers {
             //    return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoom);
             //}
 
-            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName));
+            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName, -1));
 
             if(!dataResponse.response.isOk){
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);

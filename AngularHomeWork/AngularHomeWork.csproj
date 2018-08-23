@@ -157,6 +157,10 @@
     <Content Include="Client\Services\MagicStrings.js" />
     <Content Include="Client\Views\TeacherAssignmentView.html" />
     <Content Include="Client\Controllers\TeacherAssignmentController.js" />
+    <Content Include="Client\Controllers\CreateAssignmentController.js" />
+    <Content Include="Client\Views\CreateAssignmentView.html" />
+    <Content Include="Client\Controllers\EditAssignmentController.js" />
+    <Content Include="Client\Views\EditAssignmentView.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

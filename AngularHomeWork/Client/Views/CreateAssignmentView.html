@@ -1,0 +1,21 @@
+﻿<body>
+    <md-button ng-click="cancelBtnClicked(cRName)" href="#!/TeacherClassRoom/{{cRName}}">Cancel</md-button>
+    <h1>New Assignment</h1>
+    <form>
+        <div layout="column">
+            <md-input-container layout-margin>
+                <label>Name:</label>
+                <input type="text" ng-model="newName" required md-maxlength="20" />
+            </md-input-container>
+            <md-input-container layout-margin>
+                <label>DueDate:</label>
+                <input type="date" ng-model="newDueDate" required />
+            </md-input-container>
+            <md-input-container layout-margin>
+                <label>Description:</label>
+                <input type="text" ng-model="newDescription" md-maxlength="500" />
+            </md-input-container>
+            <md-button ng-click="goBtnClicked()">Go</md-button>
+        </div>
+    </form>
+</body>
