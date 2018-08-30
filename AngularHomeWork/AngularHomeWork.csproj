@@ -108,6 +108,8 @@
     <Compile Include="Marshalling Objects\Command Objects.cs" />
     <Compile Include="Models\Assignment.cs" />
     <Compile Include="Controllers\AssignmentController.cs" />
+    <Compile Include="SaltedHash.cs" />
+    <Compile Include="Controllers\UserController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -161,6 +163,16 @@
     <Content Include="Client\Views\CreateAssignmentView.html" />
     <Content Include="Client\Controllers\EditAssignmentController.js" />
     <Content Include="Client\Views\EditAssignmentView.html" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Client\Modules\LoginAppModule.js" />
+    <Content Include="Client\Controllers\LoginPageController.js" />
+    <Content Include="Client\Controllers\LoginController.js" />
+    <Content Include="Client\Views\LoginView.html" />
+    <Content Include="Client\Controllers\RegisterController.js" />
+    <Content Include="Client\Views\RegisterView.html" />
+    <Content Include="Client\Services\LoginModelCommandService.js" />
+    <Content Include="Client\Controllers\LandingController.js" />
+    <Content Include="Client\Views\LandingView.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

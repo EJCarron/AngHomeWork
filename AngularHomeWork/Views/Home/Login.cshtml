@@ -1,0 +1,49 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta chrset="UTF 8">
+    <link rel="stylesheet" href="/css/angular-material.css" />
+    <title>Login</title>
+</head>
+<body
+    ng-app="loginApp" 
+    ng-controller="loginPageController"
+>
+    <md-toolbar class="md-primary" layout="row">
+        <md-button href="#!/Login" layout-margin>Login</md-button>
+        <md-button href="#!/Register">Register New User</md-button>
+        <md-button href="#!/Home">Home</md-button>
+    </md-toolbar>
+
+    <div ng-view></div>
+
+
+
+
+<script src="/Scripts/angular.min.js"></script>
+<script src="/Scripts/angular-route.min.js"></script>
+<script src="/Scripts/angular-animate.min.js"></script>
+<script src="/Scripts/angular-aria.min.js"></script>
+<script src="/Scripts/angular-material.min.js"></script>
+
+
+<script src="/Client/Modules/LoginAppModule.js"></script>
+    
+<script src="/Client/Controllers/LoginPageController.js"></script>
+<script src="/Client/Controllers/LoginController.js"></script>
+<script src="/Client/Controllers/RegisterController.js"></script>
+<script src="/Client/Controllers/LandingController.js"></script>
+
+
+<script src="/Client/Views/LoginView.html"></script>
+<script src="/Client/Views/RegisterView.html"></script>
+<script src="/Client/Views/LandingView.html"></script>
+
+<script src="/Client/Services/LoginModelCommandService.js"></script>
+</body>
+</html>
+

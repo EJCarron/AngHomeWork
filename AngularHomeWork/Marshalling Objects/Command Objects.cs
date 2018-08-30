@@ -8,6 +8,14 @@ namespace AngularHomeWork.MarshallingObjects {
         }
     }
 
+    public class RegisterUserCO : CommandObject{
+        public string emailAddress;
+        public string name;
+        public UserType type;
+        public string password;
+        public int schoolId;
+
+    }
 
     public class CreateClassRoomCO : CommandObject{
         public int teacherId;

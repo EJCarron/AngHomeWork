@@ -1,0 +1,24 @@
+﻿<body>
+    <form>
+        <div layout="column" flex>
+            <md-input-container layout-margin>
+                <label>Email Address:</label>
+                <input type="text" ng-model="email" required />
+            </md-input-container>
+            <md-input-container layout-margin>
+                <label>Name:</label>
+                <input type="text" ng-model="name" required />
+            </md-input-container>
+            <md-radio-group ng-model="userType">
+                <md-radio-button value=2 class="md-primary">Student</md-radio-button>
+                <md-radio-button value=1 class="md-primary"> Teacher </md-radio-button>
+            </md-radio-group>
+            <hr />
+            <md-input-container layout-margin>
+                <label>Password:</label>
+                <input type="password" ng-model="password" required />
+            </md-input-container>
+            <md-button ng-click="registerBtnClicked()">Register</md-button>
+        </div>
+    </form>
+</body>

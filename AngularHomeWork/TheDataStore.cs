@@ -98,8 +98,305 @@ namespace AngularHomeWork {
         }
         //--------------------Database calls----------------------------
 
+        public static UserTypeResponse getUserType(int userId){
+
+            UserTypeResponse userTypeResponse = new UserTypeResponse();
+
+            userTypeResponse.type = UserType.none;
+
+            SELECT select = new SELECT()
+                .col(Users.userType)
+                .FROM(Tables.Users)
+                .WHERE(new OperatorExpression()
+                       .addExpression(Users.userId)
+                       .Equals()
+                       .addExpression(new IntLiteral(userId))
+                      );
 
 
+
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    userTypeResponse.type = (UserType)reader.GetInt32(Users.userType);
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                userTypeResponse.response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            if(userTypeResponse.type == UserType.none){
+
+                userTypeResponse.response.setError("no user type.");
+            }
+
+            return userTypeResponse;
+
+        } 
+
+        public static LoginResponse attemptLogin(string email,string passwordAttempt){
+
+            LoginResponse loginResponse = new LoginResponse();
+
+            string salt = "";
+            string saltedHash = "";
+            int userType = -1;
+            int userId = -1;
+
+            SELECT select = new SELECT()
+                .col(LoginDetails.salt)
+                .col(LoginDetails.saltedHash)
+                .col(Users.userId)
+                .col(Users.userType)
+                .FROMJOIN(Tables.LoginDetails, Tables.Users, new OperatorExpression().addExpression(LoginDetails.userId).Equals().addExpression(Users.userId))
+                .WHERE(new OperatorExpression()
+                       .addExpression(LoginDetails.emailAddress)
+                       .Equals()
+                       .addExpression(new StringLiteral(email))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    salt = reader.GetString(LoginDetails.salt);
+                    saltedHash = reader.GetString(LoginDetails.saltedHash);
+                    userId = reader.GetInt32(Users.userId);
+                    userType = reader.GetInt32(Users.userType);
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                loginResponse.response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            loginResponse.userId = userId;
+            loginResponse.userType = (UserType)userType;
+
+            bool passwordIsCorrect = SaltedHash.isPasswordCorrect(passwordAttempt, salt, saltedHash);
+
+            if(passwordIsCorrect){
+
+                loginResponse.success = true;
+
+            }else{
+                loginResponse.success = false;
+            }
+
+            return loginResponse;
+
+        }
+
+
+
+
+        public static UserResponse registerNewUser(RegisterUserCO cO){
+            
+
+            UserResponse userResponse = new UserResponse();
+
+
+            userResponse.user = new User();
+
+            bool emailAvailable = checkEmail(cO.emailAddress);
+
+            if(!emailAvailable){
+                userResponse.response.setError("Email address already in use.");
+            }else{
+
+                addUser(userResponse, cO);
+
+                if(!userResponse.response.isOk){
+                    return userResponse;
+                }else{
+
+                    addLoginDetails(userResponse, cO);
+
+
+                }
+            }
+
+            return userResponse;
+        }
+
+
+
+
+
+        private static bool checkEmail(string email){
+
+
+            string emailAddress = null;
+
+
+            SELECT select = new SELECT()
+                .col(LoginDetails.emailAddress)
+                .FROM(Tables.LoginDetails)
+                .WHERE(new OperatorExpression()
+                       .addExpression(LoginDetails.emailAddress)
+                       .Equals()
+                       .addExpression(new StringLiteral(email))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    emailAddress = reader.GetString(LoginDetails.emailAddress);
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+
+            }
+
+            conn.Close();
+
+
+            if(emailAddress == null){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
+
+
+        private static void addUser(UserResponse userResponse, RegisterUserCO cO){
+
+            int newUserId = -1;
+
+            INSERTINTO insert = new INSERTINTO(Tables.Users)
+                .ValuePair(Users.userName, new StringLiteral(cO.name))
+                .ValuePair(Users.userType, new IntLiteral((int)cO.type))
+                .ValuePair(Users.schoolId, new IntLiteral(cO.schoolId));
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+                newUserId = (int)command.LastInsertedId;
+
+            } catch (Exception ex) {
+
+                userResponse.response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            if(newUserId == -1){
+
+                userResponse.response.setError("User registration failed");
+
+            }else{
+
+
+                userResponse.user.id = newUserId;
+
+            }
+
+
+
+
+        }
+
+        private static void addLoginDetails(UserResponse userResponse, RegisterUserCO cO){
+
+
+            SaltedHash saltedHash = new SaltedHash(cO.password);
+
+
+            INSERTINTO insert = new INSERTINTO(Tables.LoginDetails)
+                .ValuePair(LoginDetails.userId, new IntLiteral(userResponse.user.id))
+                .ValuePair(LoginDetails.emailAddress, new StringLiteral(cO.emailAddress))
+                .ValuePair(LoginDetails.userPassword, new StringLiteral(cO.password))
+                .ValuePair(LoginDetails.salt, new StringLiteral(saltedHash.salt))
+                .ValuePair(LoginDetails.saltedHash, new StringLiteral(saltedHash.saltedHash))
+                ;
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+
+
+            } catch (Exception ex) {
+
+                userResponse.response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+        }
 
         public static UserResponse FetchTeacher(int teacherId) {
             UserResponse userResponse = new UserResponse();

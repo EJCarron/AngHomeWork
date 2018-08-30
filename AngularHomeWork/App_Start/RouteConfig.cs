@@ -6,11 +6,18 @@ namespace AngularHomeWork {
         public static void RegisterRoutes(RouteCollection routes) {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Teacher", id = 1}
+                url: "{controller}/{action}",
+               defaults: new { controller = "Home", action = "Login" }
             );
+
+            //routes.MapRoute(
+            //    name: "Default",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Home", action = "Teacher", id = 1}
+            //);
 
             routes.MapRoute(
                 name: "CreateClassRoomPage",
@@ -31,10 +38,11 @@ namespace AngularHomeWork {
             //    url: "ClassRoom/Index",
             //    defaults: new { controller = "ClassRoom", action = "Index" }
             //);
+
             routes.MapRoute(
                 name: "Teacher",
-                url: "{controller}/Teacher/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/Teacher",
+                defaults: new { controller = "Home", action = "Teacher" }
             );
         }
     }

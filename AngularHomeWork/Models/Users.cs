@@ -15,8 +15,31 @@ namespace AngularHomeWork.Models {
 
         public UserResponse() {
             this.response = new Response();
+
         }
 
+    }
+
+
+    public class LoginResponse{
+        public int userId;
+        public bool success;
+        public UserType userType;
+        public Response response;
+
+
+        public LoginResponse(){
+            this.response = new Response();
+        }
+    }
+
+    public class UserTypeResponse{
+        public Response response;
+        public UserType type;
+
+        public UserTypeResponse(){
+            this.response = new Response();
+        }
     }
 
     public class Teacher : User {

@@ -44,6 +44,19 @@ namespace AngularHomeWork {
                 defaults: new { controller = "Assignment" }
             );
 
+
+            config.Routes.MapHttpRoute(
+                name: "RegisterUser",
+                routeTemplate: "api/User/register",
+                defaults: new { controller = "User" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "AttemptLogin",
+                routeTemplate: "api/User/attemptLogin/{email}/{passwordAttempt}",
+                defaults: new { controller = "User" }
+            );
+
         }
     }
 }
