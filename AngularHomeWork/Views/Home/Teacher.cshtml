@@ -20,7 +20,7 @@
 <body 
     ng-app="app" 
     ng-controller="teacherPageController" 
-    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; teacherId=@Model.id ;" 
+    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; " 
     layout="column"
 >
 

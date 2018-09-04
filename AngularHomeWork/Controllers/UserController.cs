@@ -73,7 +73,7 @@ namespace AngularHomeWork.Controllers
             if (!userResponse.response.isOk) {
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, userResponse.response.message);
             } else {
-                return Request.CreateResponse(System.Net.HttpStatusCode.OK, userResponse.user.id);
+                return Request.CreateResponse(System.Net.HttpStatusCode.OK, "success");
             }
         }
 

@@ -19,14 +19,14 @@ namespace AngularHomeWork {
         //-----------------------Http Response Message ----------------------------
 
 
-        public static HttpResponseMessage makeHttpResponseMessage(Response response, RequestObject requestObject, HttpRequestMessage Request){
+        public static HttpResponseMessage makeHttpResponseMessage(Response response, RequestObject requestObject, HttpRequestMessage Request, int userId){
 
             if (!response.isOk) {
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
             } else {
 
 
-                DataResponse dataResponse = TheDataStore.getData(requestObject);
+                DataResponse dataResponse = TheDataStore.getData(requestObject, userId);
 
 
                 if (!dataResponse.response.isOk) {
@@ -41,15 +41,15 @@ namespace AngularHomeWork {
 
         //----------------------Sub request sorter----------------------------
 
-        public static DataResponse getData(SubRequest request){
+        public static DataResponse getData(SubRequest request, int userId){
 
             RequestObject requestObject = new RequestObject(request);
 
-            return getData(requestObject);
+            return getData(requestObject, userId);
         }
 
 
-        public static DataResponse getData(RequestObject request){
+        public static DataResponse getData(RequestObject request, int userId){
             
             SubRequest[] subRequests = request.subRequests;
 
@@ -64,7 +64,7 @@ namespace AngularHomeWork {
 
                 if (response.isOk) {
 
-                    subResponses[i] = getSubResponse(subRequests[i], response);
+                    subResponses[i] = getSubResponse(subRequests[i], response, userId);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace AngularHomeWork {
             return dataResponse;
         }
 
-        private static SubResponse getSubResponse(SubRequest request, Response response){
+        private static SubResponse getSubResponse(SubRequest request, Response response, int userId){
 
 
             SubResponse subResponse = null;
@@ -86,7 +86,7 @@ namespace AngularHomeWork {
                     break;
 
                 case RequestType.classRoomList:
-                    subResponse = FetchClassRoomList(request, response);
+                    subResponse = FetchClassRoomList(request, response, userId);
                     break;
 
                 case RequestType.assignment:
@@ -349,9 +349,7 @@ namespace AngularHomeWork {
 
             }else{
 
-
-                userResponse.user.id = newUserId;
-
+                userResponse.userId = newUserId;
             }
 
 
@@ -366,7 +364,7 @@ namespace AngularHomeWork {
 
 
             INSERTINTO insert = new INSERTINTO(Tables.LoginDetails)
-                .ValuePair(LoginDetails.userId, new IntLiteral(userResponse.user.id))
+                .ValuePair(LoginDetails.userId, new IntLiteral(userResponse.userId))
                 .ValuePair(LoginDetails.emailAddress, new StringLiteral(cO.emailAddress))
                 .ValuePair(LoginDetails.userPassword, new StringLiteral(cO.password))
                 .ValuePair(LoginDetails.salt, new StringLiteral(saltedHash.salt))
@@ -405,7 +403,13 @@ namespace AngularHomeWork {
 
             string[] subscriptions = getStudentSubs(userResponse.response, studentId);
 
+            Student student = new Student(subscriptions);
 
+            userResponse.user = student;
+
+            getUserData(userResponse, studentId);
+
+            return userResponse;
 
         }
 
@@ -423,11 +427,11 @@ namespace AngularHomeWork {
             classRoomNames.CopyTo(arrayOfCRNames, 0);
 
 
-            Teacher teacher = new Teacher(teacherId, arrayOfCRNames);
+            Teacher teacher = new Teacher(arrayOfCRNames);
 
             userResponse.user = teacher;
 
-            getUserData(userResponse);
+            getUserData(userResponse, teacherId);
 
             return userResponse;
 
@@ -435,7 +439,7 @@ namespace AngularHomeWork {
 
         }
 
-        private static void getUserData(UserResponse userResponse){
+        private static void getUserData(UserResponse userResponse, int userId){
 
             SELECT select = new SELECT()
                 .star()
@@ -443,7 +447,7 @@ namespace AngularHomeWork {
                 .WHERE(new OperatorExpression()
                        .addExpression(Users.userId)
                        .Equals()
-                       .addExpression(new IntLiteral(userResponse.user.id))
+                       .addExpression(new IntLiteral(userId))
                       );
             //Debug Code------------------------------------------------
 
@@ -663,11 +667,9 @@ namespace AngularHomeWork {
             
         //}
 
-        private static SubResponse FetchClassRoomList(SubRequest request,Response response){
+        private static SubResponse FetchClassRoomList(SubRequest request,Response response, int teacherId){
 
             SubResponse subResponse = new SubResponse();
-
-            int teacherId = request.id;
 
             Collection<string> classRoomList = getClassRoomNames(response, teacherId);
 

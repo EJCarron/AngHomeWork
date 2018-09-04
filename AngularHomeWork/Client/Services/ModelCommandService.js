@@ -18,16 +18,16 @@
 
         }
 
-        this.createClassRoom = function(newName, teacherId, $scope){
+        this.createClassRoom = function(newName, $scope){
 
-            var commandObject = makeCreateClassRoomCO(newName, teacherId);
+            var commandObject = makeCreateClassRoomCO(newName);
 
             doHttpRequest(magicStrings.POST, magicStrings.classRoomController, magicStrings.createAction, $scope, commandObject);
 
         }
 
-        this.changeClassRoomArchiveStatus = function(teacherId, classRoomName, newArchiveStatus, $scope) {
-            var commandObject = makeArchiveClassRoomCO(classRoomName, teacherId, newArchiveStatus);
+        this.changeClassRoomArchiveStatus = function(classRoomName, newArchiveStatus, $scope) {
+            var commandObject = makeArchiveClassRoomCO(classRoomName, newArchiveStatus);
 
             doHttpRequest(magicStrings.PUT, magicStrings.classRoomController, magicStrings.archiveAction, $scope, commandObject );
         }
@@ -181,16 +181,15 @@
 
        }
 
-       var makeCreateClassRoomCO = function(newName, teacherId){
+       var makeCreateClassRoomCO = function(newName){
             
-            var classRoomListRequest = makeSubRequest(2, "", teacherId);
+            var classRoomListRequest = makeSubRequest(2, "", -1);
             var classRoomRequest = makeSubRequest(1, newName, -1);
 
             var requestObject = makeRequestObject([classRoomListRequest, classRoomRequest]);
 
             var createClassRoomCO = {
                 requestObject: requestObject,
-                teacherId: teacherId,
                 classRoomName: newName
             }
 
@@ -198,9 +197,9 @@
 
        }
 
-        var makeArchiveClassRoomCO = function(classRoomName, teacherId, newArchiveStatus) {
+        var makeArchiveClassRoomCO = function(classRoomName, newArchiveStatus) {
 
-            var classRoomListRequest = makeSubRequest(2, "", teacherId);
+            var classRoomListRequest = makeSubRequest(2, "", -1);
 
             var requestObject = makeRequestObject([classRoomListRequest]);
 

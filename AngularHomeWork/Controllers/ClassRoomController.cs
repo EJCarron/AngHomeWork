@@ -9,6 +9,7 @@ using AngularHomeWork.Models;
 using System.Web.Http;
 using System.Net.Http;
 
+
 namespace AngularHomeWork.Controllers {
     public class ClassRoomController : ApiController {
         
@@ -26,7 +27,9 @@ namespace AngularHomeWork.Controllers {
             //    return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoom);
             //}
 
-            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName, -1));
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+
+            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName, -1), userId);
 
             if(!dataResponse.response.isOk){
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
@@ -39,19 +42,23 @@ namespace AngularHomeWork.Controllers {
         [HttpPost]
         public HttpResponseMessage create(CreateClassRoomCO cO){
 
-            Response response = TheDataStore.createClassRoom(cO.teacherId, cO.classRoomName);
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
 
-            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
+            Response response = TheDataStore.createClassRoom(userId, cO.classRoomName);
+
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
 
         }
 
         [HttpPut]
         public HttpResponseMessage archive(ArchiveClassRoomCO cO){
-            
+
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+
             Response response = TheDataStore.changeClassRoomArchiveStatus(cO.classRoomName, cO.newArchiveStatus);
 
 
-            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
 
 
         }

@@ -16,7 +16,10 @@ namespace AngularHomeWork.Controllers
         [HttpGet]
         public HttpResponseMessage get(int assignmentId) {
 
-            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.assignment,"", assignmentId));
+
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+
+            DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.assignment,"", assignmentId), userId);
 
             if (!dataResponse.response.isOk) {
                 return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, dataResponse.response.message);
@@ -28,19 +31,24 @@ namespace AngularHomeWork.Controllers
 
         [HttpPost]
         public HttpResponseMessage create(CreateAssignmentCO cO) {
+
+
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
             
             Response response = TheDataStore.createAssignment(cO.newName, cO.classRoomName, cO.newDueDate, cO.newDescription);
 
-            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
 
         }
 
         [HttpPut]
         public HttpResponseMessage edit(EditAssignmentCO cO){
 
+            int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+
             Response response = TheDataStore.editAssignment(cO.id, cO.newName, cO.newDueDate, cO.newDescription, cO.newArchiveStatus);
 
-            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request);
+            return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
         }
     }
 }

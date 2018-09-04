@@ -33,7 +33,7 @@
 
             $scope.setSelectedClassRoom(newName);
             
-            modelCommand.createClassRoom(newName, $scope.teacherId, $scope);
+            modelCommand.createClassRoom(newName, $scope);
 
         }
 
@@ -41,7 +41,7 @@
         $scope.archiveClassRoom = function(classRoomName) {
             $location.path("/TeacherHome");
 
-            modelCommand.changeClassRoomArchiveStatus($scope.teacherId, classRoomName, magicStrings.archiveCode, $scope);
+            modelCommand.changeClassRoomArchiveStatus( classRoomName, magicStrings.archiveCode, $scope);
         }
 
         $scope.setSelectedAssignment = function(assignmentId){

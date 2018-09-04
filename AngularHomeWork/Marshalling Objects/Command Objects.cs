@@ -18,7 +18,7 @@ namespace AngularHomeWork.MarshallingObjects {
     }
 
     public class CreateClassRoomCO : CommandObject{
-        public int teacherId;
+        
         public string classRoomName;
 
     }
