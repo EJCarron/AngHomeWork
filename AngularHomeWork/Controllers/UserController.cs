@@ -33,7 +33,7 @@ namespace AngularHomeWork.Controllers
 
                     FormsAuthentication.SetAuthCookie(idString, false);
 
-                    FormsAuthenticationTicket ticket1 = new FormsAuthenticationTicket(
+                    FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                          1,                                   // version
                          idString,   // get username  from the form
                          DateTime.Now,                        // issue time is now
@@ -45,12 +45,14 @@ namespace AngularHomeWork.Controllers
 
 
 
-                   HttpCookie cookie = new HttpCookie(
-                   FormsAuthentication.FormsCookieName,
-                   FormsAuthentication.Encrypt(ticket1)
+                    HttpCookie cookie = new HttpCookie(
+                        FormsAuthentication.FormsCookieName,
+                        FormsAuthentication.Encrypt(ticket)
                     );
 
-                    Request.Headers. Add("Set-Cookie", cookie.ToString());
+                    Request.Headers.Add("Set-Cookie", cookie.ToString());
+
+
 
 
                 }

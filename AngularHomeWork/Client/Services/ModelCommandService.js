@@ -4,7 +4,14 @@
 
 
     var ModelCommand = function($http, magicStrings) {
-        
+
+
+        this.logout = function() {
+
+            doLogoutHttpRequest();
+
+        }
+
         this.getClassRoom = function(cRName, $scope) {
 
             doHttpGetRequest(magicStrings.classRoomController, cRName, $scope);
@@ -60,7 +67,7 @@
 
             $http({
                 method : "GET",
-                url : (magicStrings.URL + controller + "/" + magicStrings.getAction + "/" + parameter)
+                url : (magicStrings.apiURL + controller + "/" + magicStrings.getAction + "/" + parameter)
                 }).then(function success(response) {
 
                     dealWithGenericResponse(response.data, $scope)
@@ -73,7 +80,7 @@
 
             $http({
                 method : method,
-                url : (magicStrings.URL + controller + "/" + action),
+                url : (magicStrings.apiURL + controller + "/" + action),
                 data : commandObject
                 }).then(function success(response) {
 
@@ -81,6 +88,19 @@
                    
                 });
         }
+
+        var doLogoutHttpRequest = function() {
+
+            $http({
+                method : magicStrings.PUT,
+                url : (magicStrings.URL + "Home/Logout")
+                }).then(function success(response){
+                
+                    location.reload(true);
+
+                });
+        }
+
 
 //----------------------GENERIC RESPONSES ----------------------
 

@@ -44,8 +44,6 @@ namespace AngularHomeWork.Models {
 
     public class Teacher : User {
 
-
-
         public string[] classRoomNames;
 
         public Teacher(int id, string[] classRoomNames ) {
@@ -65,6 +63,17 @@ namespace AngularHomeWork.Models {
             this.nextDueDate = nextDueDate;
         }
 
+
+
+    }
+
+    public class Student : User{
+
+        public string[] subscriptions;
+
+        public Student(string[] subscriptions){
+            this.subscriptions = subscriptions;
+        }
 
 
     }

@@ -398,6 +398,19 @@ namespace AngularHomeWork {
 
         }
 
+
+        public static UserResponse FetchStudent(int studentId){
+
+            UserResponse userResponse = new UserResponse();
+
+            string[] subscriptions = getStudentSubs(userResponse.response, studentId);
+
+
+
+        }
+
+
+
         public static UserResponse FetchTeacher(int teacherId) {
             UserResponse userResponse = new UserResponse();
 
@@ -414,13 +427,23 @@ namespace AngularHomeWork {
 
             userResponse.user = teacher;
 
+            getUserData(userResponse);
+
+            return userResponse;
+
+
+
+        }
+
+        private static void getUserData(UserResponse userResponse){
+
             SELECT select = new SELECT()
                 .star()
                 .FROM(Tables.Users)
                 .WHERE(new OperatorExpression()
                        .addExpression(Users.userId)
                        .Equals()
-                       .addExpression(new IntLiteral(teacherId))
+                       .addExpression(new IntLiteral(userResponse.user.id))
                       );
             //Debug Code------------------------------------------------
 
@@ -438,8 +461,8 @@ namespace AngularHomeWork {
 
                 while (reader.Read()) {
 
-                    teacher.name = reader.GetString(Users.userName);
-                    teacher.schoolId = reader.GetInt32(Users.schoolId);
+                    userResponse.user.name = reader.GetString(Users.userName);
+                    userResponse.user.schoolId = reader.GetInt32(Users.schoolId);
 
                 }
                 reader.Close();
@@ -451,11 +474,63 @@ namespace AngularHomeWork {
 
             conn.Close();
 
-            return userResponse;
+        }
 
 
+        private static string[] getStudentSubs(Response response, int studentId){
+
+
+            Collection<string> subs = new Collection<string>();
+
+
+            SELECT select = new SELECT()
+                .col(Subscriptions.classRoomName)
+                .FROM(Tables.Subscriptions)
+                .WHERE(new OperatorExpression()
+                       .addExpression(Subscriptions.studentId)
+                       .Equals()
+                       .addExpression(new IntLiteral(studentId))
+                      );
+
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    subs.Add(reader.GetString(Subscriptions.classRoomName));
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            string[] arrayOfSubs = new string[subs.Count];
+
+            subs.CopyTo(arrayOfSubs, 0);
+
+            return arrayOfSubs;
 
         }
+
+
 
         private static Collection<string> getClassRoomNames(Response response, int teacherId){
 
@@ -626,7 +701,9 @@ namespace AngularHomeWork {
 
             assignments.CopyTo(arrayOfALs, 0);
 
-            subResponse.modelObject = new ClassRoom(name, arrayOfALs);
+            string[] students = getClassRoomStudents(response, name);
+
+            subResponse.modelObject = new ClassRoom(name, arrayOfALs, students);
 
             subResponse.requestType = RequestType.classRoom;
 
@@ -698,7 +775,54 @@ namespace AngularHomeWork {
 
         }
 
+        private static string[] getClassRoomStudents(Response response,string classRoomName){
 
+            Collection<string> students = new Collection<string>();
+
+            SELECT select = new SELECT()
+                .col(Users.userName)
+                .FROMJOIN(Tables.Subscriptions, Tables.Users, new OperatorExpression().addExpression(Subscriptions.studentId).Equals().addExpression(Users.userId))
+                .WHERE(new OperatorExpression()
+                       .addExpression(Subscriptions.classRoomName)
+                       .Equals()
+                       .addExpression(new StringLiteral(classRoomName))
+                      );
+            
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+                
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    students.Add(reader.GetString(Users.userName));
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+                
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();   
+
+            string[] arrayOfStuds = new string[students.Count];
+
+            students.CopyTo(arrayOfStuds, 0);
+
+            return arrayOfStuds;
+
+        }
 
         private static Collection<AssignmentListItem> getAssignmentListItems(Response response, string name){
 

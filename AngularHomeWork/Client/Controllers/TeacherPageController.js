@@ -4,6 +4,12 @@
 
         $scope.selectedClassRoom = nullObjects.classRoom;
 
+        $scope.logoutBtnClicked = function() {
+
+            modelCommand.logout();
+        }
+
+
         $scope.classRoomBtnClicked = function(classRoomName) {
 
             $scope.setSelectedClassRoom(classRoomName);

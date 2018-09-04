@@ -16,9 +16,7 @@
                 data : commandObject
                 }).then(function success(response) {
 
-                    var newUserId = response.data;
 
-                   loginSuccess(newUserId, userType);
                    
                 });
 
@@ -37,7 +35,7 @@
 
                     if(loginResponse.success){
 
-                        loginSuccess(loginResponse.userId, loginResponse.userType);
+                        loginSuccess(loginResponse.userType);
                     }else{
 
                         loginFailure("incorrect username or password");
@@ -49,7 +47,7 @@
         }
 
 
-        var loginSuccess = function(userId, userType){
+        var loginSuccess = function(userType){
 
             
 
@@ -65,7 +63,7 @@
                 }break;
             }
 
-            window.location.href = 'http://127.0.0.1:8080/Home/'+ controller + "/" + userId;
+            window.location.href = 'http://127.0.0.1:8080/Home/'+ controller;
 
         }
 

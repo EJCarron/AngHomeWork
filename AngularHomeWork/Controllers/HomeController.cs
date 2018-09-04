@@ -7,7 +7,9 @@ using System.Web.Mvc.Ajax;
 using Newtonsoft.Json;
 
 using AngularHomeWork.Models;
-
+using System.Web.Security;
+using System.Security.Principal;
+using System.Diagnostics.Contracts;
 
 namespace AngularHomeWork.Controllers {
 
@@ -23,10 +25,21 @@ namespace AngularHomeWork.Controllers {
             return View();
         }
 
+        public ActionResult Logout(){
+            Contract.Ensures(Contract.Result<ActionResult>() != null);
+
+            FormsAuthentication.SignOut();
+
+            HttpContext.User =
+                new GenericPrincipal(new GenericIdentity(string.Empty), null);
+
+            return RedirectToAction("Login");
+        }
+
         public ActionResult Login(){
 
 
-            if (HttpContext.User.Identity.Name != null) {
+            if (HttpContext.User.Identity.Name != "") {
                 int userId = Convert.ToInt32(HttpContext.User.Identity.Name);
 
                 UserTypeResponse userTypeResponse = TheDataStore.getUserType(userId);
@@ -40,7 +53,7 @@ namespace AngularHomeWork.Controllers {
 
                         case UserType.student:
                             return RedirectToAction("Student");
-                    }
+                    }; 
 
 
                 }
@@ -50,7 +63,7 @@ namespace AngularHomeWork.Controllers {
         }
 
 
-        [Authorize (Roles = "Teacher")]
+        [Authorize]
         public ActionResult Teacher() {
            
             int userId = Convert.ToInt32( HttpContext.User.Identity.Name);
@@ -60,6 +73,19 @@ namespace AngularHomeWork.Controllers {
             Teacher teacher = (Teacher)response.user;
 
             return View(teacher);
+        }
+
+        [Authorize]
+        public ActionResult Student(){
+
+            int userId = Convert.ToInt32(HttpContext.User.Identity.Name);
+
+            UserResponse userResponse = TheDataStore.FetchStudent(userId);
+
+            Student student = (Student)userResponse.user;
+
+            return View(student);
+
         }
 
 

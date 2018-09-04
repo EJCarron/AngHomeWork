@@ -7,7 +7,9 @@
         this.PUT = "PUT";
         this.POST = "POST"
 
-        this.URL = "http://127.0.0.1:8080/api/";
+        this.apiURL = "http://127.0.0.1:8080/api/";
+
+        this.URL = "http://127.0.0.1:8080/";
 
         this.classRoomController = "ClassRoom";
         this.assignmentController = "Assignment";
