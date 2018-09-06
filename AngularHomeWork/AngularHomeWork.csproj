@@ -110,6 +110,9 @@
     <Compile Include="Controllers\AssignmentController.cs" />
     <Compile Include="SaltedHash.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
+    <Compile Include="Controllers\StudentAssignmentController.cs" />
+    <Compile Include="Controllers\OutStandingController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -173,6 +176,18 @@
     <Content Include="Client\Services\LoginModelCommandService.js" />
     <Content Include="Client\Controllers\LandingController.js" />
     <Content Include="Client\Views\LandingView.html" />
+    <Content Include="Views\Home\Student.cshtml" />
+    <Content Include="Client\Modules\StudentAppModule.js" />
+    <Content Include="Client\Services\StudentModelCommandService.js" />
+    <Content Include="Client\Controllers\StudentPageController.js" />
+    <Content Include="Client\Controllers\StudentHomeController.js" />
+    <Content Include="Client\Views\StudentHomeView.html" />
+    <Content Include="Client\Controllers\SubscribeToClassRoomController.js" />
+    <Content Include="Client\Views\SubscribeToClassRoomView.html" />
+    <Content Include="Client\Controllers\StudentClassRoomController.js" />
+    <Content Include="Client\Views\StudentClassRoomView.html" />
+    <Content Include="Client\Controllers\StudentAssignmentController.js" />
+    <Content Include="Client\Views\StudentAssignmentView.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

@@ -82,7 +82,7 @@ namespace AngularHomeWork {
 
             switch (request.requestType) {
                 case RequestType.classRoom:
-                    subResponse = FetchClassRoom(request, response);
+                    subResponse = FetchTeacherClassRoom(request, response);
                     break;
 
                 case RequestType.classRoomList:
@@ -90,7 +90,20 @@ namespace AngularHomeWork {
                     break;
 
                 case RequestType.assignment:
-                    subResponse = FetchAssignment(request, response);
+                    subResponse = FetchTeacherAssignment(request, response);
+                    break;
+
+                case RequestType.studentClassRoom:
+                    subResponse = FetchStudentClassRoom(request, response, userId);
+                    break;
+                case RequestType.studentAssignment:
+                    subResponse = FetchStudentAssignment(request, response, userId);
+                    break;
+                case RequestType.subscriptionList:
+                    subResponse = FetchSubscriptions(request, response, userId);
+                    break;
+                case RequestType.outStandingAssignments:
+                    subResponse = FetchOutStandingAssignments(request, response, userId);
                     break;
             }
 
@@ -397,6 +410,7 @@ namespace AngularHomeWork {
         }
 
 
+
         public static UserResponse FetchStudent(int studentId){
 
             UserResponse userResponse = new UserResponse();
@@ -667,6 +681,114 @@ namespace AngularHomeWork {
             
         //}
 
+
+        private static SubResponse FetchSubscriptions(SubRequest request, Response response, int userId){
+
+            SubResponse subResponse = new SubResponse();
+
+            string[] subs = getStudentSubs(response, userId);
+
+            subResponse.requestType = RequestType.subscriptionList;
+
+            subResponse.modelObject = subs;
+
+            return subResponse;
+
+        }
+
+        private static SubResponse FetchOutStandingAssignments(SubRequest request, Response response, int userId){
+            SubResponse subResponse = new SubResponse();
+
+            Collection<AssignmentListItem> assignments = new Collection<AssignmentListItem>();
+
+            SELECT select = new SELECT()
+                .col(Assignments.assignmentName)
+                .col(Assignments.dueDate)
+                .col(Assignments.assignmentId)
+                .col(AssignmentCompletions.completionDate)
+                .FROM(
+                    new JOIN(EJoinType.Join, Tables.Assignments, Tables.Subscriptions,
+                             new OperatorExpression()
+                             .addExpression(Assignments.classRoomName)
+                             .Equals()
+                             .addExpression(Subscriptions.classRoomName)
+                             .AND()
+                             .addExpression(Subscriptions.studentId)
+                             .Equals()
+                             .addExpression(new IntLiteral(userId))
+                 ),
+                    new JOIN(EJoinType.Left, null, Tables.AssignmentCompletions,
+                             new OperatorExpression()
+                             .addExpression(AssignmentCompletions.assignmentId)
+                             .Equals()
+                             .addExpression(Assignments.assignmentId)
+                             .AND()
+                             .addExpression(AssignmentCompletions.studentId)
+                             .Equals()
+                             .addExpression(Subscriptions.studentId)
+
+                            )
+                )
+                .WHERE(new OperatorExpression()
+                       .addExpression(Assignments.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+                   
+                    var ordinal = reader.GetOrdinal(AssignmentCompletions.completionDate);
+
+                    if (reader.IsDBNull(ordinal)) {
+
+                        AssignmentListItem assignment = new AssignmentListItem();
+
+                        assignment.dueDate = Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d");
+                        assignment.id = reader.GetInt32(Assignments.assignmentId);
+                        assignment.title = reader.GetString(Assignments.assignmentName);
+
+
+                        assignments.Add(assignment);
+                    }
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            AssignmentListItem[] arrayOfALs = new AssignmentListItem[assignments.Count];
+
+            assignments.CopyTo(arrayOfALs, 0);
+
+            subResponse.requestType = RequestType.outStandingAssignments;
+
+            subResponse.modelObject = arrayOfALs;
+
+            return subResponse;
+
+
+        }
+
         private static SubResponse FetchClassRoomList(SubRequest request,Response response, int teacherId){
 
             SubResponse subResponse = new SubResponse();
@@ -688,24 +810,36 @@ namespace AngularHomeWork {
 
         }
 
+        private static SubResponse FetchStudentClassRoom(SubRequest request, Response response, int userId){
+            
+            SubResponse subResponse = new SubResponse();
+
+            string name = request.name;
+
+            StudentAssignmentListItem[] assignmentListItems = getStudentAssignmentListItems(response, name, userId);
+
+            subResponse.modelObject = new StudentClassRoom(name, assignmentListItems);
+
+            subResponse.requestType = RequestType.studentClassRoom;
+
+            return subResponse;
+        }
 
 
-        private static SubResponse FetchClassRoom(SubRequest request, Response response){
+
+
+        private static SubResponse FetchTeacherClassRoom(SubRequest request, Response response){
 
             SubResponse subResponse = new SubResponse();
 
 
             string name = request.name;
 
-            Collection<AssignmentListItem> assignments = getAssignmentListItems(response, name);
-
-            AssignmentListItem[] arrayOfALs = new AssignmentListItem[assignments.Count];
-
-            assignments.CopyTo(arrayOfALs, 0);
+            TeacherAssignmentListItem[] assignmentListItems = getTeacherAssignmentListItems(response, name);
 
             string[] students = getClassRoomStudents(response, name);
 
-            subResponse.modelObject = new ClassRoom(name, arrayOfALs, students);
+            subResponse.modelObject = new TeacherClassRoom(name, assignmentListItems, students);
 
             subResponse.requestType = RequestType.classRoom;
 
@@ -713,11 +847,100 @@ namespace AngularHomeWork {
 
         }
 
-        private static SubResponse FetchAssignment(SubRequest request, Response response) {
+        private static SubResponse FetchTeacherAssignment(SubRequest request, Response response){
+            SubResponse subResponse = new SubResponse();
+
+            int id = request.id;
+
+            Assignment assignment = FetchAssignment(id, response);
+
+
+            subResponse.modelObject = assignment;
+
+            subResponse.requestType = RequestType.assignment;
+
+            return subResponse;
+
+        }
+
+        private static SubResponse FetchStudentAssignment(SubRequest request, Response response, int userId){
 
             SubResponse subResponse = new SubResponse();
 
             int id = request.id;
+
+            Assignment assignment = FetchAssignment(id, response);
+
+            bool markedDone = isAssignmentMarkedDone(id, userId, response);
+
+            StudentAssignment studentAssignment = new StudentAssignment(assignment, markedDone);
+
+            subResponse.modelObject = studentAssignment;
+
+            subResponse.requestType = RequestType.studentAssignment;
+
+            return subResponse;
+
+
+        }
+
+        private static bool isAssignmentMarkedDone(int assignmentId, int userId, Response response){
+
+            SELECT select = new SELECT()
+                .star()
+                .FROM(Tables.AssignmentCompletions)
+                .WHERE(new OperatorExpression()
+                       .addExpression(AssignmentCompletions.studentId)
+                       .Equals()
+                       .addExpression(new IntLiteral(userId))
+                       .AND()
+                       .addExpression(AssignmentCompletions.assignmentId)
+                       .Equals()
+                       .addExpression(new IntLiteral(assignmentId))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            int markedDone = -1;
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    markedDone = reader.GetInt32(AssignmentCompletions.assignmentId);
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            if(markedDone == -1){
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+
+
+
+        private static Assignment FetchAssignment(int id, Response response) {
+
+
 
             Assignment assignment = new Assignment();
 
@@ -769,11 +992,7 @@ namespace AngularHomeWork {
             conn.Close();
 
 
-            subResponse.modelObject = assignment;
-
-            subResponse.requestType = RequestType.assignment;
-
-            return subResponse;
+            return assignment;
 
         }
 
@@ -826,9 +1045,96 @@ namespace AngularHomeWork {
 
         }
 
-        private static Collection<AssignmentListItem> getAssignmentListItems(Response response, string name){
 
-            Collection<AssignmentListItem> assignments = new Collection<AssignmentListItem>();
+
+
+        private static StudentAssignmentListItem[] getStudentAssignmentListItems(Response response, string name, int studentId){
+
+            Collection<StudentAssignmentListItem> assignments = new Collection<StudentAssignmentListItem>();
+
+            SELECT select = new SELECT()
+                .col(Assignments.assignmentName)
+                .col(Assignments.assignmentId)
+                .col(Assignments.dueDate)
+                .col(AssignmentCompletions.completionDate)
+                .FROMJOINLeft(Tables.Assignments, Tables.AssignmentCompletions, new OperatorExpression()
+                              .addExpression(Assignments.assignmentId)
+                              .Equals()
+                              .addExpression(AssignmentCompletions.assignmentId)
+                              .AND()
+                              .addExpression(AssignmentCompletions.studentId)
+                              .Equals()
+                              .addExpression(new IntLiteral(studentId))
+                             )
+                .WHERE(new OperatorExpression()
+                       .addExpression(Assignments.classRoomName)
+                       .Equals()
+                       .addExpression(new StringLiteral(name))
+                       .AND()
+                       .addExpression(Assignments.isClosed)
+                       .Equals()
+                       .addExpression(new IntLiteral(0))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+                    bool isDone = true;
+
+                    var ordinal = reader.GetOrdinal(AssignmentCompletions.completionDate);
+
+                    if (reader.IsDBNull(ordinal)) {
+
+                        isDone = false;
+                    }
+
+                    assignments.Add(new StudentAssignmentListItem(
+                        reader.GetString(Assignments.assignmentName),
+                        reader.GetInt32(Assignments.assignmentId),
+                        Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d"),
+                        isDone
+                    ));
+
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            StudentAssignmentListItem[] arrayOfALs = new StudentAssignmentListItem[assignments.Count];
+
+            assignments.CopyTo(arrayOfALs, 0);
+
+
+            return arrayOfALs;
+
+        }
+
+
+
+
+        private static TeacherAssignmentListItem[] getTeacherAssignmentListItems(Response response, string name){
+
+            Collection<TeacherAssignmentListItem> assignments = new Collection<TeacherAssignmentListItem>();
 
             SELECT select = new SELECT()
                 .col(Assignments.assignmentId)
@@ -861,7 +1167,7 @@ namespace AngularHomeWork {
 
                 while (reader.Read()) {
 
-                    AssignmentListItem assignmentListItem = new AssignmentListItem();
+                    TeacherAssignmentListItem assignmentListItem = new TeacherAssignmentListItem();
 
 
                     assignmentListItem.id = reader.GetInt32(Assignments.assignmentId);
@@ -884,7 +1190,13 @@ namespace AngularHomeWork {
 
             conn.Close();
 
-            return assignments;
+
+            TeacherAssignmentListItem[] arrayOfALs = new TeacherAssignmentListItem[assignments.Count];
+
+            assignments.CopyTo(arrayOfALs, 0);
+
+
+            return arrayOfALs;
         }
 
 
@@ -1188,7 +1500,288 @@ namespace AngularHomeWork {
                 
         }
 
+        public static Response changeDoneState(int assignmentId, bool currentDoneState, int userId){
+
+            Response response = new Response();
+
+            if(currentDoneState == false){
+
+                markAssignmentDone(assignmentId, userId, response);
+
+            }else{
+
+                deleteMarkedDone(assignmentId, userId, response);
+
+            }
 
 
+            return response;
+        }
+
+        private static void markAssignmentDone(int assignmentId, int userId, Response response){
+
+            INSERTINTO insert = new INSERTINTO(Tables.AssignmentCompletions)
+                .ValuePair(AssignmentCompletions.assignmentId, new IntLiteral(assignmentId))
+                .ValuePair(AssignmentCompletions.studentId, new IntLiteral(userId))
+                .ValuePair(AssignmentCompletions.completionDate, new DateLiteral(DateTime.Now))
+                ;
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+        }
+
+
+        private static void deleteMarkedDone(int assignmentId, int userId, Response response){
+
+            DELETE delete = new DELETE().FROM(Tables.AssignmentCompletions).WHERE(new OperatorExpression()
+                                                                                  .addExpression(AssignmentCompletions.assignmentId)
+                                                                                  .Equals()
+                                                                                  .addExpression(new IntLiteral(assignmentId))
+                                                                                  .AND()
+                                                                                  .addExpression(AssignmentCompletions.studentId)
+                                                                                  .Equals()
+                                                                                  .addExpression(new IntLiteral(userId))
+                                                                                 );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(delete.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = delete.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+        }
+
+
+
+        public static Response unsubscribeToClassRoom(int userId, string classRoomName){
+
+            Response response = new Response();
+
+            DELETE delete = new DELETE().FROM(Tables.Subscriptions).WHERE(new OperatorExpression()
+                                                                                  .addExpression(Subscriptions.studentId)
+                                                                                  .Equals()
+                                                                                  .addExpression(new IntLiteral(userId))
+                                                                                  .AND()
+                                                                                  .addExpression(Subscriptions.classRoomName)
+                                                                                  .Equals()
+                                                                                  .addExpression(new StringLiteral(classRoomName))
+                                                                                 );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(delete.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = delete.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+
+
+            return response;
+        }
+
+
+
+
+        public static Response subscribeToClassRoom(int userId, string classRoomName){
+
+            Response response = new Response();
+
+            bool exists = doesRoomExist(classRoomName, response);
+
+            if (exists) {
+                
+                    makeSubscription(userId, classRoomName, response);
+
+            }else{
+
+                response.setError(classRoomName + " doesn't exist");
+            }
+
+            return response;
+        }
+
+
+        private static bool doesRoomExist(string classRoomName, Response response){
+
+            bool exists = false;
+
+            string name = null;
+
+
+            SELECT select = new SELECT()
+                .col(ClassRooms.classRoomName)
+                .FROM(Tables.ClassRooms)
+                .WHERE(new OperatorExpression()
+                       .addExpression(ClassRooms.classRoomName)
+                       .Equals()
+                       .addExpression(new StringLiteral(classRoomName))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    name = reader.GetString(ClassRooms.classRoomName);
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            if(name == classRoomName){
+
+                exists = true;
+            }
+
+            return exists;
+        }
+
+
+        private static bool isUserAlreadySubscribed(int userId, string classRoomName, Response response){
+
+            bool alreadySubbed = false;
+
+            string name = "";
+
+            SELECT select = new SELECT()
+                .col(Subscriptions.classRoomName)
+                .FROM(Tables.Subscriptions)
+                .WHERE(new OperatorExpression()
+                       .addExpression(Subscriptions.classRoomName)
+                       .Equals()
+                       .addExpression(new StringLiteral(classRoomName))
+                       .AND()
+                       .addExpression(Subscriptions.studentId)
+                       .Equals()
+                       .addExpression(new IntLiteral(userId))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    name = reader.GetString(ClassRooms.classRoomName);
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+
+            conn.Close();
+
+            if (name == classRoomName) {
+
+                alreadySubbed = true;
+            }
+
+            return alreadySubbed;
+        }
+
+
+        private static void makeSubscription(int userId, string classRoomName, Response response){
+
+            INSERTINTO insert = new INSERTINTO(Tables.Subscriptions)
+                .ValuePair(Subscriptions.classRoomName, new StringLiteral(classRoomName))
+                .ValuePair(Subscriptions.studentId, new IntLiteral(userId))
+                ;
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(insert.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = insert.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+                conn.Open();
+                command.ExecuteNonQuery();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+        }
     }
 }

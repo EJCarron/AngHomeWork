@@ -1,0 +1,11 @@
+﻿<body>
+    <div class="container" layout="column" flex>
+        <md-button ng-click="backBtnClicked(classRoom)" href="#!/StudentClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}} </md-button>
+        <div class="container" layout="column" layout-padding="10" flex>
+            <h1>{{assignment.name}}</h1>
+            <h3>{{assignment.dueDate}}</h3>
+            <p>{{assignment.description}}</p>
+            <md-button href="#!/StudentClassRoom/{{assignment.classRoomName}}" ng-click="markDoneBtnClicked()">{{doneText}}</md-button>
+        </div>
+    </div>
+</body>

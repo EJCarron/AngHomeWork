@@ -17,6 +17,15 @@
             classRoomName:"",
             dueDate:"",
             description:""
+            }
+
+        this.studentAssignment = {
+            id:-1,
+            name:"",
+            classRoomName:"",
+            dueDate:"",
+            description:"",
+            markedDone:null
         }
 
         }

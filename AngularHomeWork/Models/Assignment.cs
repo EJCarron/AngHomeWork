@@ -12,4 +12,20 @@ namespace AngularHomeWork.Models {
         public Assignment() {
         }
     }
+
+    public class TeacherAssignment : Assignment{}
+
+    public class StudentAssignment : Assignment{
+        public bool markedDone;
+
+        public StudentAssignment(Assignment assignment, bool markedDone){
+
+            this.id = assignment.id;
+            this.name = assignment.name;
+            this.classRoomName = assignment.classRoomName;
+            this.dueDate = assignment.dueDate;
+            this.description = assignment.description;
+            this.markedDone = markedDone;
+        }
+    }
 }

@@ -1,0 +1,23 @@
+﻿<body>
+    <h1>{{classRoomName}}</h1>
+    <md-button ng-click="unsubBtnClicked()">Unsubscribe</md-button>
+    <div class="container">
+        <md-list flex>
+            <md-subheader>Assignments</md-subheader>
+            <md-list-item class="md-2-line" ng-repeat="assignment in classRoom.assignments">
+                <div ng-if="assignment.markedDone">
+                    <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/StudentAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
+                        <h3>{{assignment.title}}</h3>
+                        <h4>DONE</h4>
+                    </md-button>
+                </div>
+                <div ng-if="assignment.markedDone == false">
+                    <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/StudentAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
+                        <h3>{{assignment.title}}</h3>
+                        <h4>{{assignment.dueDate}}</h4>
+                    </md-button>
+                </div>
+            </md-list-item>
+        </md-list>
+    </div>
+</body>

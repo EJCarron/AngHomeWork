@@ -46,6 +46,12 @@ namespace AngularHomeWork {
             );
 
             routes.MapRoute(
+                name: "Student",
+                url: "{controller}/Student",
+                defaults: new { controller = "Home", action = "Student" }
+            );
+
+            routes.MapRoute(
                 name: "Login",
                 url: "{controller}/Login",
                 defaults: new { controller = "Home", action = "Login" }

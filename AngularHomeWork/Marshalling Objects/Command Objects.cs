@@ -44,4 +44,18 @@ namespace AngularHomeWork.MarshallingObjects {
         public int newArchiveStatus;
 
     }
+
+
+    public class ChangeDoneStateCO: CommandObject{
+        public int assignmentId;
+        public bool currentDoneState;
+    }
+
+    public class SubscribeCO : CommandObject{
+        public string classRoomName;
+    }
+
+    public class UnsubscribeCO : CommandObject {
+        public string classRoomName;
+    }
 }

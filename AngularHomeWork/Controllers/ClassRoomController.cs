@@ -15,18 +15,7 @@ namespace AngularHomeWork.Controllers {
         
         [HttpGet]
         public HttpResponseMessage get(string classRoomName){
-
-
-            //Response response = new Response();
-
-            //ClassRoom classRoom = (ClassRoom)TheDataStore.FetchClassRoom(new SubRequest(RequestType.classRoom, classRoomName), response).modelObject;
-
-            //if (!response.isOk) {
-            //    return Request.CreateErrorResponse(System.Net.HttpStatusCode.InternalServerError, response.message);
-            //} else {
-            //    return Request.CreateResponse(System.Net.HttpStatusCode.OK, classRoom);
-            //}
-
+            
             int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
 
             DataResponse dataResponse = TheDataStore.getData(new SubRequest(RequestType.classRoom, classRoomName, -1), userId);
