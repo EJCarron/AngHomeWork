@@ -9,7 +9,11 @@ namespace AngularHomeWork {
         public static DataTable Subscriptions = new DataTable("Subscriptions");
         public static DataTable Users = new DataTable("Users");
 
+
     }
+
+
+
 
     public class Assignments : DataTable {
         public Assignments(string tableName) : base(tableName) {
@@ -82,19 +86,8 @@ namespace AngularHomeWork {
         public static COLUMN userName = new COLUMN(Users.tableName, "userName");
         public static COLUMN userType = new COLUMN(Users.tableName, "userType");
         public static COLUMN isClosed = new COLUMN(Users.tableName, "isClosed");
-        public static COLUMN schoolId = new COLUMN(Users.tableName, "schoolId");
-    }
-
-    public class Schools : DataTable {
-
-        public Schools(string tableName) : base(tableName) {
-
-        }
-
-        public static string tableName = "Schools";
-
-        public static COLUMN schoolId = new COLUMN(Schools.tableName, "schoolId");
-        public static COLUMN schoolName = new COLUMN(Schools.tableName, "schoolName");
 
     }
+
+
 }

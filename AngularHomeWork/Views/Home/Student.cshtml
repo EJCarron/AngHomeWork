@@ -18,6 +18,7 @@
     ng-controller="studentPageController"
     ng-init="subscriptions = @Html.Raw(Json.Encode(Model.subscriptions).Replace("\"", "'")) ; studentName = '@Model.name'; "
     layout="column"
+    id="studentPage"
     >
 
     <md-toolbar class="md-primary" layout="row">
@@ -47,7 +48,9 @@
             </md-list>
         </md-sidenav>
 
-        <div ng-view></div>
+        <md-content class="md-padding" flex>
+            <div ng-view></div>
+        </md-content>
 
 
 

@@ -38,7 +38,7 @@
                     style=" min-width: 10em !important;
                             width: 50vw !important;
                             max-width: 10em !important;">
-            <md-list>
+            <md-list layout-align-middle>
                 <md-list-item>
                     <md-button href ="#!/TeacherHome" class="md-accent md-raised md-hue-1">Home</md-button>
                 </md-list-item>
@@ -50,9 +50,9 @@
                 </md-list-item>
             </md-list>
         </md-sidenav>
-
-        <div ng-view></div>
-
+        <md-content class="md-padding" flex>
+            <div ng-view></div>
+        </md-content>
 
 
     </div>

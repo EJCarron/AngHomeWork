@@ -166,9 +166,68 @@ namespace AngularHomeWork {
 
         } 
 
+
+
+        //public static int checkSchoolCode(string schoolCodeAttempt, Response response){
+
+        //    int schoolId = -1;
+
+
+
+        //    SELECT select = new SELECT()
+        //        .col(Schools.schoolId)
+        //        .col(Schools.schoolCode)
+        //        .FROM(Tables.Schools)
+        //        .WHERE(new OperatorExpression()
+        //               .addExpression(Schools.schoolCode)
+        //               .Equals()
+        //               .addExpression(new StringLiteral(schoolCodeAttempt))
+        //              );
+
+
+        //    //Debug Code------------------------------------------------
+
+        //    Console.WriteLine(select.render(ERenderType.NonParamed));
+        //    //Debug Code------------------------------------------------
+
+        //    MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+        //    MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+        //    try {
+
+        //        conn.Open();
+        //        MySqlDataReader reader = command.ExecuteReader();
+
+        //        while (reader.Read()) {
+                    
+        //            schoolId = reader.GetInt32(Users.schoolId);
+
+        //        }
+        //        reader.Close();
+
+        //    } catch (Exception ex) {
+
+        //        response.setError(ex.ToString());
+        //    }
+
+        //    conn.Close();
+
+
+        //    return schoolId;
+
+
+
+        //}
+
+
+
         public static LoginResponse attemptLogin(string email,string passwordAttempt){
 
+
+
             LoginResponse loginResponse = new LoginResponse();
+
 
             string salt = "";
             string saltedHash = "";
@@ -251,17 +310,18 @@ namespace AngularHomeWork {
             if(!emailAvailable){
                 userResponse.response.setError("Email address already in use.");
             }else{
+                
+                    addUser(userResponse, cO);
 
-                addUser(userResponse, cO);
+                    if (!userResponse.response.isOk) {
+                        return userResponse;
+                    } else {
 
-                if(!userResponse.response.isOk){
-                    return userResponse;
-                }else{
-
-                    addLoginDetails(userResponse, cO);
+                        addLoginDetails(userResponse, cO);
 
 
-                }
+                    }
+
             }
 
             return userResponse;
@@ -331,7 +391,7 @@ namespace AngularHomeWork {
             INSERTINTO insert = new INSERTINTO(Tables.Users)
                 .ValuePair(Users.userName, new StringLiteral(cO.name))
                 .ValuePair(Users.userType, new IntLiteral((int)cO.type))
-                .ValuePair(Users.schoolId, new IntLiteral(cO.schoolId));
+                ;
 
             //Debug Code------------------------------------------------
 
@@ -410,6 +470,58 @@ namespace AngularHomeWork {
         }
 
 
+        //public static SchoolsResponse FetchSchools(){
+
+        //    SchoolsResponse schoolsResponse = new SchoolsResponse();
+
+
+        //    Collection<School> schools = new Collection<School>();
+
+        //    SELECT select = new SELECT()
+        //        .star()
+        //        .FROM(Tables.Schools);
+
+
+        //    //Debug Code------------------------------------------------
+
+        //    Console.WriteLine(select.render(ERenderType.NonParamed));
+        //    //Debug Code------------------------------------------------
+
+        //    MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+        //    MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+        //    try {
+
+        //        conn.Open();
+        //        MySqlDataReader reader = command.ExecuteReader();
+
+        //        while (reader.Read()) {
+
+        //            schools.Add(new School(
+        //                reader.GetString(Schools.schoolName),
+        //                reader.GetInt32(Schools.schoolId)
+        //            ));
+
+        //        }
+        //        reader.Close();
+
+        //    } catch (Exception ex) {
+
+        //        schoolsResponse.response.setError(ex.ToString());
+        //    }
+
+        //    conn.Close();
+
+        //    School[] arrayOfSchools = new School[schools.Count];
+
+        //    schools.CopyTo(arrayOfSchools, 0);
+
+        //    schoolsResponse.loginModel.schools = arrayOfSchools;
+
+        //    return schoolsResponse;
+        //}
+
 
         public static UserResponse FetchStudent(int studentId){
 
@@ -480,7 +592,6 @@ namespace AngularHomeWork {
                 while (reader.Read()) {
 
                     userResponse.user.name = reader.GetString(Users.userName);
-                    userResponse.user.schoolId = reader.GetInt32(Users.schoolId);
 
                 }
                 reader.Close();
@@ -854,12 +965,70 @@ namespace AngularHomeWork {
 
             Assignment assignment = FetchAssignment(id, response);
 
+            string[] completedStudents = fetchCompletedStudents(id, response);
 
-            subResponse.modelObject = assignment;
+            TeacherAssignment teacherAssignment = new TeacherAssignment(assignment, completedStudents);
+
+            subResponse.modelObject = teacherAssignment;
 
             subResponse.requestType = RequestType.assignment;
 
             return subResponse;
+
+        }
+
+        private static string[] fetchCompletedStudents(int id,Response response){
+
+            Collection<string> students = new Collection<string>();
+
+            SELECT select = new SELECT()
+                .col(Users.userName)
+                .FROMJOIN(Tables.Users, Tables.AssignmentCompletions, new OperatorExpression()
+                          .addExpression(Users.userId)
+                          .Equals()
+                          .addExpression(AssignmentCompletions.studentId)
+                         )
+                .WHERE(new OperatorExpression()
+                       .addExpression(AssignmentCompletions.assignmentId)
+                            .Equals()
+                       .addExpression(new IntLiteral(id))
+                      );
+
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    students.Add(reader.GetString(Users.userName));
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            string[] arrayOfStuds = new string[students.Count];
+
+            students.CopyTo(arrayOfStuds, 0);
+
+            return arrayOfStuds;
 
         }
 
@@ -1222,9 +1391,19 @@ namespace AngularHomeWork {
                 conn.Open();
                 command.ExecuteNonQuery();
 
-            } catch (Exception ex) {
+            } catch (MySqlException ex) {
 
-                response.setError(ex.ToString());
+                if (ex.Number == 1062) {
+                    
+                    response.setError(classRoomName +" is already taken.");
+
+                } else {
+                    response.setError(ex.ToString());
+                }
+            } catch(Exception ex){
+
+                response.setError("Unknown error while creating classroom.");
+
             }
 
             conn.Close();

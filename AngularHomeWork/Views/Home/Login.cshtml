@@ -2,6 +2,7 @@
     Layout = null;
 }
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +13,7 @@
 <body
     ng-app="loginApp" 
     ng-controller="loginPageController"
+    layout ="column"
 >
     <md-toolbar class="md-primary" layout="row">
         <md-button href="#!/Login" layout-margin>Login</md-button>
@@ -19,8 +21,10 @@
         <md-button href="#!/Home">Home</md-button>
     </md-toolbar>
 
-    <div ng-view></div>
-
+    <md-content class="md-padding" flex>
+        <div ng-view></div>
+    </md-content>
+   
 
 
 

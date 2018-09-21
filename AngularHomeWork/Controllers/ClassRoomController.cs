@@ -11,6 +11,7 @@ using System.Net.Http;
 
 
 namespace AngularHomeWork.Controllers {
+    [Authorize(Roles = "Teacher")]
     public class ClassRoomController : ApiController {
         
         [HttpGet]

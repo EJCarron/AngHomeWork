@@ -21,6 +21,8 @@ namespace AngularHomeWork.Models {
     }
 
 
+
+
     public class LoginResponse{
         public int userId;
         public bool success;

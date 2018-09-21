@@ -29,11 +29,16 @@
 
         $scope.createClassRoom = function(newName){
 
-            $location.path("/TeacherClassRoom/"+newName)
 
-            $scope.setSelectedClassRoom(newName);
             
-            modelCommand.createClassRoom(newName, $scope);
+            modelCommand.createClassRoom(newName, $scope, function(){
+            
+                $location.path("/TeacherClassRoom/"+newName)
+
+                $scope.setSelectedClassRoom(newName);
+            
+            }
+                );
 
         }
 

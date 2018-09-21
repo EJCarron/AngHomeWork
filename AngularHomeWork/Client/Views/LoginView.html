@@ -1,18 +1,29 @@
 ﻿<body>
-    
-    <form>
-        <div layout="column" flex>
-            <md-input-container layout-margin>
-                <label>Email Address:</label>
-                <input type="text" ng-model="email" required />
-            </md-input-container>
-            <md-input-container layout-margin>
-                <label>Password:</label>
-                <input type="password" ng-model="password" required />
-            </md-input-container>
-            <md-button ng-click="loginBtnClicked()">Login</md-button>
-        </div>
-    </form>
+    <md-card flex="50" layout-padding-middle>
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <h1 class="md-title " layout-padding>Enter Your Details</h1>
+            </md-toolbar>
 
-
+            <div layout="column" class="md-inline-form" flex>
+                <form>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Email Address:</label>
+                            <input type="text" ng-model="email" required />
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Password:</label>
+                            <input type="password" ng-model="password" required />
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-button ng-click="loginBtnClicked()">Login</md-button>
+                    </div>
+                </form>
+            </div>
+        </md-card-content>
+    </md-card>
 </body>

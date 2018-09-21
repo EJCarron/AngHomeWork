@@ -2,7 +2,7 @@
 (function(app) {
 
 
-    var modelCommand = function($http, magicStrings, $location) {
+    var modelCommand = function($http, magicStrings, $location,$mdDialog) {
 
         this.logout = function() {
 
@@ -26,7 +26,7 @@
 
             var commandObject = makeChangeDoneStateCO(assignmentId, currentDoneState, classRoomName);
 
-            doHttpRequest(magicStrings.POST, magicStrings.studAssignmentController, magicStrings.changeDoneAction, $scope, commandObject);
+            doHttpRequest(magicStrings.POST, magicStrings.studAssignmentController, magicStrings.changeDoneAction, $scope, commandObject, null);
         }
 
 
@@ -34,14 +34,14 @@
 
             var commandObject = makeSubscribeCO(name);
 
-            doHttpRequest(magicStrings.POST, magicStrings.subscriptionController, magicStrings.subscribeAction, $scope, commandObject);
+            doHttpRequest(magicStrings.POST, magicStrings.subscriptionController, magicStrings.subscribeAction, $scope, commandObject, (magicStrings.subSucc + name));
         }
 
         this.unsubFromClassRoom = function(name, $scope){
 
             var commandObject = makeUnsubCO(name);
 
-            doHttpRequest(magicStrings.PUT, magicStrings.subscriptionController, magicStrings.unsubscribeAction, $scope, commandObject);
+            doHttpRequest(magicStrings.PUT, magicStrings.subscriptionController, magicStrings.unsubscribeAction, $scope, commandObject, (magicStrings.unsubSucc + name));
         }
 
         this.getOutStandingAssignments = function($scope){
@@ -62,6 +62,12 @@
                 
                     location.reload(true);
 
+                }, function error(response){
+
+                    var $event = "";
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
         }
 
@@ -76,13 +82,22 @@
 
                     dealWithGenericResponse(response.data, $scope)
                   
+                }, function error(response){
+
+                    var $event = "";
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
         }
 
         
 
 
-        var doHttpRequest = function(method, controller,action, $scope, commandObject){
+        var doHttpRequest = function(method, controller,action, $scope, commandObject, successMessage){
+
+            var $event = "";
+
 
             $http({
                 method : method,
@@ -90,9 +105,44 @@
                 data : commandObject
                 }).then(function success(response) {
 
+                    if(successMessage != null){
+                       showDialog($event, successMessage, 1);
+                    }
+
                     dealWithGenericResponse(response.data, $scope)
                    
+                }, function error(response){
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
+
+
+        }
+
+        var showDialog = function(ev, message, type) {
+
+            var titleText = "";
+
+            if(type == 1){
+
+                titleText = "Success";
+            }else{
+
+                titleText = "Error";
+            }
+
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#studentPage')))
+                    .clickOutsideToClose(true)
+                    .title(titleText)
+                    .textContent(message)
+                    .ariaLabel('Alert Dialog')
+                    .ok('Got it!')
+                    .targetEvent(ev)
+            );
+
         }
 
  //----------------------GENERIC RESPONSES ----------------------
@@ -233,7 +283,7 @@
         }
 
     }
-    app.service('modelCommand',['$http','magicStrings','$location', modelCommand]);
+    app.service('modelCommand',['$http','magicStrings','$location','$mdDialog', modelCommand]);
 
 
 }(angular.module("app")));

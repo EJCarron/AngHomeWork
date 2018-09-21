@@ -2,12 +2,12 @@
 (function(app) {
 
 
-    var ModelCommand = function($http, $window) {
+    var ModelCommand = function($http, $window, $location, $mdDialog) {
 
 
-        this.registerNewUser = function(newEmail, newName, userType, newPassword) {
+        this.registerNewUser = function(newEmail, newName, userType, newPassword, schoolCode) {
 
-            var commandObject = makeRegisterUserCO(newEmail, newName, userType, newPassword);
+            var commandObject = makeRegisterUserCO(newEmail, newName, userType, newPassword, schoolCode);
 
 
              $http({
@@ -16,8 +16,18 @@
                 data : commandObject
                 }).then(function success(response) {
 
+                    $location.path("#!/Login");
 
+                    var $event = "";
+
+                    showDialog($event, "Account registered, now Login",  1);
                    
+                }, function error(response){
+
+                    var $event = "";
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
 
         }
@@ -38,7 +48,9 @@
                         loginSuccess(loginResponse.userType);
                     }else{
 
-                        loginFailure("incorrect username or password");
+                        var $event = "";
+
+                        showDialog("incorrect username or password", $event, 2);
 
                     }
                 });
@@ -67,14 +79,33 @@
 
         }
 
-        var loginFailure = function(message){
+        var showDialog = function(ev, message, type) {
 
-            //make it come up with error display.
+            var titleText = "";
+
+            if(type == 1){
+
+                titleText = "Success";
+            }else{
+
+                titleText = "Error";
+            }
+
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#studentPage')))
+                    .clickOutsideToClose(true)
+                    .title(titleText)
+                    .textContent(message)
+                    .ariaLabel('Alert Dialog')
+                    .ok('Got it!')
+                    .targetEvent(ev)
+            );
 
         }
 
 
-        var makeRegisterUserCO = function(newEmail, newName, userType, newPassword) {
+        var makeRegisterUserCO = function(newEmail, newName, userType, newPassword, schoolCode) {
 
             var cO = {
                 requestObject: null,
@@ -82,7 +113,7 @@
                 name: newName,
                 type: userType,
                 password: newPassword,
-                schoolId: 1
+                schoolCode: schoolCode
 
                 }
 
@@ -94,7 +125,7 @@
 
     }
 
-    app.service('modelCommand',['$http','$window', ModelCommand]);
+    app.service('modelCommand',['$http','$window','$location','$mdDialog', ModelCommand]);
 
 
 }(angular.module("loginApp")));

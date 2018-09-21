@@ -29,6 +29,11 @@
 
         this.archiveCode = 1;
         this.unarchiveCode = 0;
+
+        this.unsubSucc = "Unsubscribed from ";
+        this.subSucc = "Subscribed to ";
+        this.crtClrSucc = "ClassRoom Created";
+        this.crtAssSucc = "Assignment Created";
         }
 
     app.service('magicStrings',[magicStrings]);

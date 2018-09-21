@@ -1,11 +1,20 @@
 ﻿<body>
     
-    <h1 layout-margin>Subscribe To ClassRoom</h1>
-    <form>
-        <md-input-container layout-margin>
-            <label>Enter ClassRoom Name</label>
-            <input type="text" ng-model="name" required md-maxlength="20" />
-        </md-input-container>
-        <button ng-click="goBtnClicked()">Go</button>
-    </form>
+    <md-card flex="50">
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <h1 class="md-title " layout-padding>Subscribe To Classroom</h1>
+            </md-toolbar>
+
+            <div layout="column" class="md-inline-form">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>Enter ClassRoom Name</label>
+                        <input type="text" ng-model="name" required md-maxlength="20" />
+                    </md-input-container>
+                    <md-button ng-click="goBtnClicked()">Go</md-button>
+                </form>
+            </div>
+        </md-card-content>
+    </md-card>
 </body>

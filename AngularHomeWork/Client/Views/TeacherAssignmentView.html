@@ -1,12 +1,33 @@
 ﻿<body ng-controller="teacherAssignmentController">
+    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/TeacherClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}}</md-button>
     <div class="container" layout="column" flex>
-        <md-button ng-click="backBtnClicked(classRoom)" href="#!/TeacherClassRoom/{{assignment.classRoomName}}"> Back </md-button>
-
-        <div class="container" layout="column" layout-padding="10" flex>
-            <h1>{{assignment.name}}</h1>
-            <h3>{{assignment.dueDate}}</h3>
-            <p>{{assignment.description}}</p>
-            <md-button href="#!/EditAssignment">Edit</md-button>
+        
+        <div class=container layout="row">
+            <md-card flex="50">
+                <md-card-content>
+                    <md-toolbar class="md-accent md-hue-1">
+                        <h1 class="md-title" layout-padding> {{assignment.name}}</h1>
+                    </md-toolbar>
+                    <div class="container" layout="column" layout-padding="10">
+                        <h3>{{assignment.dueDate}}</h3>
+                        <md-divider></md-divider>
+                        <p>{{assignment.description}}</p>
+                    </div>
+                    <md-button href="#!/EditAssignment">Edit</md-button>
+                </md-card-content>
+            </md-card>
+            <md-card flex="25">
+                <md-card-content>
+                    <md-toolbar class="md-accent md-hue-1">
+                        <h1 class="md-title" layout-padding> Handed In</h1>
+                    </md-toolbar>
+                    <md-list>
+                        <md-list-item class="md-2-line" ng-repeat="student in assignment.students">
+                            <h3>{{student}}</h3>
+                        </md-list-item>
+                    </md-list>
+                </md-card-content>
+            </md-card>
         </div>
     </div>
 </body>

@@ -1,24 +1,39 @@
 ﻿<body>
-    <form>
-        <div layout="column" flex>
-            <md-input-container layout-margin>
-                <label>Email Address:</label>
-                <input type="text" ng-model="email" required />
-            </md-input-container>
-            <md-input-container layout-margin>
-                <label>Name:</label>
-                <input type="text" ng-model="name" required />
-            </md-input-container>
-            <md-radio-group ng-model="userType">
-                <md-radio-button value=2 class="md-primary">Student</md-radio-button>
-                <md-radio-button value=1 class="md-primary"> Teacher </md-radio-button>
-            </md-radio-group>
-            <hr />
-            <md-input-container layout-margin>
-                <label>Password:</label>
-                <input type="password" ng-model="password" required />
-            </md-input-container>
-            <md-button ng-click="registerBtnClicked()">Register</md-button>
-        </div>
-    </form>
+    <md-card flex="50">
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <h1 class="md-title " layout-padding>Enter Your Details</h1>
+            </md-toolbar>
+
+            <div layout="column" class="md-inline-form">
+                <form>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Email Address:</label>
+                            <input type="text" ng-model="email" required />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Name:</label>
+                            <input type="text" ng-model="name" required />
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-radio-group ng-model="userType" layout="row">
+                            <md-radio-button value=2 class="md-primary">Student</md-radio-button>
+                            <md-radio-button value=1 class="md-primary"> Teacher </md-radio-button>
+                        </md-radio-group>
+                    </div>
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>Password:</label>
+                            <input type="password" ng-model="password" required />
+                        </md-input-container>
+                    </div>
+                   
+
+                    <md-button ng-click="registerBtnClicked()">Register</md-button>
+                </form>
+            </div>
+        </md-card-content>
+   </md-card>
 </body>

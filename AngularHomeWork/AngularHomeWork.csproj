@@ -188,6 +188,7 @@
     <Content Include="Client\Views\StudentClassRoomView.html" />
     <Content Include="Client\Controllers\StudentAssignmentController.js" />
     <Content Include="Client\Views\StudentAssignmentView.html" />
+    <Content Include="Client\Views\blank.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SqlWrapper\SqlWrapper\SqlWrapper.csproj">

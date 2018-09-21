@@ -14,6 +14,7 @@ namespace AngularHomeWork.Controllers
     public class OutStandingController : ApiController
     {
         [HttpGet]
+        [Authorize(Roles = "Student")]
         public HttpResponseMessage get() {
 
             int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);

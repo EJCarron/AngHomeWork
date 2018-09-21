@@ -1,14 +1,20 @@
 ﻿<body>
-    <h1>Hello Student Home</h1>
+    <h1>Welcome Home {{studentName}}</h1>
     <div class="container">
-        <md-list flex>
-            <md-subheader>Out Standing Assignments</md-subheader>
-            <md-list-item class="md-2-line" ng-repeat="assignment in outStandingAssignments">
-                    <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/StudentAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
-                        <h3>{{assignment.title}}</h3>
-                        <h4>{{assignment.dueDate}}</h4>
-                    </md-button>
-            </md-list-item>
-        </md-list>
+        <md-card flex="50">
+            <md-card-content>
+                <md-toolbar class="md-accent md-hue-1">
+                    <h1 class="md-title" layout-padding>Outstanding Assignments</h1>
+                </md-toolbar>
+                <md-list>
+                    <md-list-item class="md-2-line" ng-repeat="assignment in outStandingAssignments">
+                        <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/StudentAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
+                            <h3>{{assignment.title}}</h3>
+                            <h4>{{assignment.dueDate}}</h4>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
     </div>
 </body>

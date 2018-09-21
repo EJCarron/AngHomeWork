@@ -18,7 +18,7 @@ namespace AngularHomeWork.Controllers
 
         [HttpGet]
         public HttpResponseMessage attemptLogin(string email, string passwordAttempt){
-
+            
 
             LoginResponse loginResponse = TheDataStore.attemptLogin(email, passwordAttempt);
 
@@ -31,7 +31,9 @@ namespace AngularHomeWork.Controllers
                     string idString = loginResponse.userId.ToString();
 
 
-                    FormsAuthentication.SetAuthCookie(idString, false);
+                    //FormsAuthentication.SetAuthCookie(idString, false);
+
+
 
                     FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                          1,                                   // version
@@ -50,7 +52,10 @@ namespace AngularHomeWork.Controllers
                         FormsAuthentication.Encrypt(ticket)
                     );
 
-                    Request.Headers.Add("Set-Cookie", cookie.ToString());
+
+                    HttpContext.Current.Response.Cookies.Add(cookie);
+
+                    //Request.Headers.Add("Set-Cookie", cookie.ToString());
 
 
 

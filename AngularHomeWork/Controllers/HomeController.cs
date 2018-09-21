@@ -42,6 +42,7 @@ namespace AngularHomeWork.Controllers {
             if (HttpContext.User.Identity.Name != "") {
                 int userId = Convert.ToInt32(HttpContext.User.Identity.Name);
 
+
                 UserTypeResponse userTypeResponse = TheDataStore.getUserType(userId);
 
                 if(userTypeResponse.response.isOk){
@@ -63,7 +64,7 @@ namespace AngularHomeWork.Controllers {
         }
 
 
-        [Authorize]
+        [Authorize (Roles = "Teacher")]
         public ActionResult Teacher() {
            
             int userId = Convert.ToInt32( HttpContext.User.Identity.Name);
@@ -75,7 +76,7 @@ namespace AngularHomeWork.Controllers {
             return View(teacher);
         }
 
-        [Authorize]
+        [Authorize (Roles = "Student") ]
         public ActionResult Student(){
 
             int userId = Convert.ToInt32(HttpContext.User.Identity.Name);

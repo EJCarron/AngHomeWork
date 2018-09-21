@@ -13,7 +13,6 @@ namespace AngularHomeWork.MarshallingObjects {
         public string name;
         public UserType type;
         public string password;
-        public int schoolId;
 
     }
 

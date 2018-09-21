@@ -7,7 +7,7 @@
 
         $scope.backBtnClicked = function(classRoomName){
 
-            $scope.$parentScope.classRoomBtnClicked(classRoomName);
+            $scope.$parent.classRoomBtnClicked(classRoomName);
         }
 
 

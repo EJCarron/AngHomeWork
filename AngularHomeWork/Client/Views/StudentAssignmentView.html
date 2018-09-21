@@ -1,11 +1,16 @@
 ﻿<body>
-    <div class="container" layout="column" flex>
-        <md-button ng-click="backBtnClicked(classRoom)" href="#!/StudentClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}} </md-button>
-        <div class="container" layout="column" layout-padding="10" flex>
-            <h1>{{assignment.name}}</h1>
-            <h3>{{assignment.dueDate}}</h3>
-            <p>{{assignment.description}}</p>
+    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/StudentClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}} </md-button>
+    <md-card flex="50">
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <h1 class="md-title" layout-padding> {{assignment.name}}</h1>
+            </md-toolbar>
+            <div class="container" layout="column" layout-padding="10" flex>                
+                <h3>{{assignment.dueDate}}</h3>
+                <md-divider></md-divider>
+                <p>{{assignment.description}}</p>
+            </div>
             <md-button href="#!/StudentClassRoom/{{assignment.classRoomName}}" ng-click="markDoneBtnClicked()">{{doneText}}</md-button>
-        </div>
-    </div>
+        </md-card-content>
+    </md-card>
 </body>

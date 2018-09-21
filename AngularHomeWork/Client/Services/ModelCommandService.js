@@ -3,7 +3,7 @@
 (function(app) {
 
 
-    var ModelCommand = function($http, magicStrings) {
+    var ModelCommand = function($http, magicStrings, $mdDialog) {
 
 
         this.logout = function() {
@@ -18,18 +18,18 @@
 
         }
 
-        this.createClassRoom = function(newName, $scope){
+        this.createClassRoom = function(newName, $scope, successHandler){
 
             var commandObject = makeCreateClassRoomCO(newName);
 
-            doHttpRequest(magicStrings.POST, magicStrings.classRoomController, magicStrings.createAction, $scope, commandObject);
+            doHttpRequest(magicStrings.POST, magicStrings.classRoomController, magicStrings.createAction, $scope, commandObject, magicStrings.crtClrSucc, successHandler);
 
         }
 
         this.changeClassRoomArchiveStatus = function(classRoomName, newArchiveStatus, $scope) {
             var commandObject = makeArchiveClassRoomCO(classRoomName, newArchiveStatus);
 
-            doHttpRequest(magicStrings.PUT, magicStrings.classRoomController, magicStrings.archiveAction, $scope, commandObject );
+            doHttpRequest(magicStrings.PUT, magicStrings.classRoomController, magicStrings.archiveAction, $scope, commandObject);
         }
 
 
@@ -42,7 +42,7 @@
 
             var commandObject = makeCreateAssignmentCO(newName, classRoomName, newDueDate, newDescription);
 
-            doHttpRequest(magicStrings.POST, magicStrings.assignmentController, magicStrings.createAction, $scope, commandObject);
+            doHttpRequest(magicStrings.POST, magicStrings.assignmentController, magicStrings.createAction, $scope, commandObject, magicStrings.crtAssSucc);
 
         }
 
@@ -72,11 +72,20 @@
 
                     dealWithGenericResponse(response.data, $scope)
                   
+                }, function error(response){
+
+                    var $event = "";
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
         }
 
 
-        var doHttpRequest = function(method, controller,action, $scope, commandObject){
+        var doHttpRequest = function(method, controller,action, $scope, commandObject, successMessage, successHandler){
+
+           var $event = "";
+
 
             $http({
                 method : method,
@@ -84,8 +93,21 @@
                 data : commandObject
                 }).then(function success(response) {
 
+                    if(successMessage != null){
+                       showDialog($event, successMessage, 1);
+                    }
+
                     dealWithGenericResponse(response.data, $scope)
+
+                    if (successHandler) {
+                       
+                        successHandler();
+                    }
                    
+                }, function error(response){
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
         }
 
@@ -98,9 +120,39 @@
                 
                     location.reload(true);
 
+                }, function error(response){
+
+                    var $event = "";
+
+                    showDialog($event, response.data.Message, 2);
+
                 });
         }
 
+        var showDialog = function(ev, message, type) {
+
+            var titleText = "";
+
+            if(type == 1){
+
+                titleText = "Success";
+            }else{
+
+                titleText = "Error";
+            }
+
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#studentPage')))
+                    .clickOutsideToClose(true)
+                    .title(titleText)
+                    .textContent(message)
+                    .ariaLabel('Alert Dialog')
+                    .ok('Got it!')
+                    .targetEvent(ev)
+            );
+
+        }
 
 //----------------------GENERIC RESPONSES ----------------------
 
@@ -252,7 +304,7 @@
 
     }
 
-    app.service('modelCommand',['$http','magicStrings', ModelCommand]);
+    app.service('modelCommand',['$http','magicStrings','$mdDialog', ModelCommand]);
 
 }(angular.module("app")));
 

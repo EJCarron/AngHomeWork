@@ -1,24 +1,30 @@
 ﻿<body ng-controller="editAssignmentController">
-    <div class="container" layout="row">
-        <md-button href="#!/TeacherClassRoom/{{assignment.classRoomName}}">Cancel</md-button>
-        <md-button ng-click="deleteBtnClicked($event)" >Delete</md-button>
-    </div>
-    <h1>Edit Assignment</h1>
-    <form>
-        <div layout="column">
-            <md-input-container layout-margin>
-                <label>Name:</label>
-                <input type="text" ng-model="assignment.name" required md-maxlength="20" />
-            </md-input-container>
-            <md-input-container layout-margin>
-                <label>DueDate:</label>
-                <input type="date" ng-model="assignment.dueDate" required />
-            </md-input-container>
-            <md-input-container layout-margin>
-                <label>Description:</label>
-                <input type="text" ng-model="assignment.description" md-maxlength="500" />
-            </md-input-container>
-            <md-button href="#!/TeacherClassRoom/{{assignment.classRoomName}}" ng-click="goBtnClicked()">Go</md-button>
-        </div>
-    </form>
+    <md-card flex="50">
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <h1 class="md-title " layout-padding>Edit Assignment</h1>
+            </md-toolbar>
+            <div layout="column" class="md-inline-form" flex>
+                <form>
+                    
+                        <md-input-container class="md-block">
+                            <label>Name:</label>
+                            <input type="text" ng-model="assignment.name" required md-maxlength="20" />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>DueDate:</label>
+                            <input type="date" ng-model="assignment.dueDate" required />
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Description:</label>
+                            <input type="text" ng-model="assignment.description" md-maxlength="500" />
+                        </md-input-container>
+                        <md-button href="#!/TeacherClassRoom/{{assignment.classRoomName}}" ng-click="goBtnClicked()">Go</md-button>
+                        <md-button href="#!/TeacherClassRoom/{{assignment.classRoomName}}">Cancel</md-button>
+                        <md-button ng-click="deleteBtnClicked($event)">Delete</md-button>
+                    
+                </form>
+            </div>
+        </md-card-content>
+    </md-card>
 </body>
