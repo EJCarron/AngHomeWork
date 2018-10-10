@@ -6,8 +6,11 @@
 
         $scope.goBtnClicked = function() {
 
-           $scope.$parent.createClassRoom($scope.newName)
-
+            if ($scope.newName == null) {
+                $scope.$parent.showAlertDialog("Classroom name field must be completed.");
+            }else{
+                $scope.$parent.createClassRoom($scope.newName)
+            }
         }
     }
 

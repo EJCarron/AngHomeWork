@@ -2,6 +2,8 @@
     Layout = null;
 }
 
+@using AngularHomeWork.Models
+@model AngularHomeWork.Models.LoginPageModel
 
 <!DOCTYPE html>
 <html>
@@ -14,11 +16,20 @@
     ng-app="loginApp" 
     ng-controller="loginPageController"
     layout ="column"
+    ng-init=
+    "
+    schoolName = '@Model.settings.schoolName' ;
+    "
 >
-    <md-toolbar class="md-primary" layout="row">
-        <md-button href="#!/Login" layout-margin>Login</md-button>
-        <md-button href="#!/Register">Register New User</md-button>
-        <md-button href="#!/Home">Home</md-button>
+    <md-toolbar class="md-primary" layout="row" layout-align="space-between center">
+
+        <p layout-margin>{{schoolName}}</p>
+        <div layout-align="center center">
+            <md-button href="#!/Home" class="md-accent md-raised md-hue-1">Home</md-button>
+            <md-button href="#!/Login" class="md-accent md-raised md-hue-1">Login</md-button>
+            <md-button href="#!/Register" class="md-accent md-raised md-hue-1">Register New User</md-button>
+
+        </div>
     </md-toolbar>
 
     <md-content class="md-padding" flex>
@@ -43,9 +54,6 @@
 <script src="/Client/Controllers/LandingController.js"></script>
 
 
-<script src="/Client/Views/LoginView.html"></script>
-<script src="/Client/Views/RegisterView.html"></script>
-<script src="/Client/Views/LandingView.html"></script>
 
 <script src="/Client/Services/LoginModelCommandService.js"></script>
 </body>

@@ -8,7 +8,7 @@ namespace AngularHomeWork {
         public static DataTable LoginDetails = new DataTable("LoginDetails");
         public static DataTable Subscriptions = new DataTable("Subscriptions");
         public static DataTable Users = new DataTable("Users");
-
+        public static DataTable Settings = new DataTable("Settings");
 
     }
 
@@ -89,5 +89,15 @@ namespace AngularHomeWork {
 
     }
 
+    public class Settings : DataTable {
+        public Settings(string tableName) : base(tableName) {
+        }
 
+        public static string tableName = "Settings";
+
+        public static COLUMN id = new COLUMN(Settings.tableName, "id");
+        public static COLUMN value = new COLUMN(Settings.tableName, "value");
+
+
+    }
 }

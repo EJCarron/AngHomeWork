@@ -1,5 +1,5 @@
 ﻿<body>
-    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/StudentClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}} </md-button>
+    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/StudentClassRoom/{{assignment.classRoomName}}" class="md-accent md-raised md-hue-1"> {{assignment.classRoomName}} </md-button>
     <md-card flex="50">
         <md-card-content>
             <md-toolbar class="md-accent md-hue-1">
@@ -10,7 +10,7 @@
                 <md-divider></md-divider>
                 <p>{{assignment.description}}</p>
             </div>
-            <md-button href="#!/StudentClassRoom/{{assignment.classRoomName}}" ng-click="markDoneBtnClicked()">{{doneText}}</md-button>
+            <md-button href="#!/StudentClassRoom/{{assignment.classRoomName}}" ng-click="markDoneBtnClicked()" class="md-accent md-raised md-hue-1">{{doneText}}</md-button>
         </md-card-content>
     </md-card>
 </body>

@@ -5,8 +5,13 @@
 
         $scope.loginBtnClicked = function() {
 
+            if(($scope.email == null) || ($scope.password == null)){
+                
+                $scope.showAlertDialog("Email or Password cannot be left blank");
+            }else{
 
-            $scope.loginAttempt($scope.email, $scope.password);
+                $scope.loginAttempt($scope.email, $scope.password);
+            }
         } 
     }
 

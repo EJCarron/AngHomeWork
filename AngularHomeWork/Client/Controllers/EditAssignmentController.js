@@ -5,12 +5,27 @@
 
         $scope.assignment = $scope.selectedAssignment;
 
-        
+       
+
+        $scope.dueDate = new Date(
+            ($scope.assignment.dueDateTicks / 10000)-(Math.abs(new Date(0, 0, 1).setFullYear(1))));
 
         $scope.goBtnClicked = function(){
 
+            if(
+                ($scope.assignment.name == null)
+                ||
+                ($scope.assignment.dueDate == null)
+                ||
+                ($scope.assignment.description == null)
+            ) {
+                $scope.$parent.showAlertDialog("All fields must be completed.");
+            }else{
 
-            $scope.editAssignment($scope.assignment);
+                var dueDateTicks = (($scope.dueDate.getTime() * 10000) + 621355968000000000);
+
+                $scope.editAssignment($scope.assignment, dueDateTicks);
+            }
         }
 
         $scope.deleteBtnClicked = function(ev) {

@@ -22,4 +22,12 @@ namespace AngularHomeWork {
         student = 2
     }
 
+    public enum SettingsId {
+
+        none = 0,
+        name = 1,
+        phoneNumber = 2
+    
+    }
+
 }

@@ -56,19 +56,19 @@
             $scope.selectedAssignment = nullObjects.assignment;
         }
 
-        $scope.createAssignment = function(newName, classRoomName, newDueDate, newDescription){
+        $scope.createAssignment = function(newName, classRoomName, newDueDateTicks, newDescription){
 
             $location.path("/TeacherClassRoom/"+classRoomName);
 
-            modelCommand.createAssignment(newName, classRoomName, newDueDate, newDescription, $scope);
+            modelCommand.createAssignment(newName, classRoomName, newDueDateTicks, newDescription, $scope);
         }
 
 
-        $scope.editAssignment = function(assignment) {
+        $scope.editAssignment = function(assignment, newDueDateTicks) {
 
             $scope.setSelectedAssignment(assignment.id);
 
-            modelCommand.editAssignment(assignment, $scope);
+            modelCommand.editAssignment(assignment,newDueDateTicks, $scope);
         }
 
         $scope.archiveAssignment = function(assignment){
@@ -78,7 +78,10 @@
             modelCommand.changeAssignmentArchiveStatus(assignment, magicStrings.archiveCode, $scope);
         }
 
+        $scope.showAlertDialog = function(message) {
 
+            modelCommand.showAlertDialog(message);
+        }
     }
 
     app.controller("teacherPageController", TeacherPageController);

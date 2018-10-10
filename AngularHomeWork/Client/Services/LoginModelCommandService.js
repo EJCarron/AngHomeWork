@@ -33,6 +33,7 @@
         }
 
 
+
         this.attemptLogin = function(email, passwordAttempt){
 
 
@@ -50,7 +51,7 @@
 
                         var $event = "";
 
-                        showDialog("incorrect username or password", $event, 2);
+                        showDialog( $event,"incorrect username or password", 2);
 
                     }
                 });
@@ -58,6 +59,13 @@
 
         }
 
+        this.showAlertDialog = function(message) {
+
+            var $event = "";
+
+            showDialog( $event, message, 2);
+
+        } 
 
         var loginSuccess = function(userType){
 

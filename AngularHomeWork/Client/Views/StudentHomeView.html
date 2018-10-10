@@ -7,7 +7,7 @@
                     <h1 class="md-title" layout-padding>Outstanding Assignments</h1>
                 </md-toolbar>
                 <md-list>
-                    <md-list-item class="md-2-line" ng-repeat="assignment in outStandingAssignments">
+                    <md-list-item class="md-2-line" ng-repeat="assignment in outStandingAssignments track by $index">
                         <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/StudentAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
                             <h3>{{assignment.title}}</h3>
                             <h4>{{assignment.dueDate}}</h4>

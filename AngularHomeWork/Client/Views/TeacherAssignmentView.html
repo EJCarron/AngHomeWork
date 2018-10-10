@@ -1,5 +1,5 @@
 ﻿<body ng-controller="teacherAssignmentController">
-    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/TeacherClassRoom/{{assignment.classRoomName}}"> {{assignment.classRoomName}}</md-button>
+    <md-button ng-click="backBtnClicked(assignment.classRoomName)" href="#!/TeacherClassRoom/{{assignment.classRoomName}}" class="md-accent md-raised md-hue-1"> {{assignment.classRoomName}}</md-button>
     <div class="container" layout="column" flex>
         
         <div class=container layout="row">
@@ -13,7 +13,7 @@
                         <md-divider></md-divider>
                         <p>{{assignment.description}}</p>
                     </div>
-                    <md-button href="#!/EditAssignment">Edit</md-button>
+                    <md-button href="#!/EditAssignment" class="md-accent md-raised md-hue-1">Edit</md-button>
                 </md-card-content>
             </md-card>
             <md-card flex="25">
@@ -22,7 +22,7 @@
                         <h1 class="md-title" layout-padding> Handed In</h1>
                     </md-toolbar>
                     <md-list>
-                        <md-list-item class="md-2-line" ng-repeat="student in assignment.students">
+                        <md-list-item class="md-2-line" ng-repeat="student in assignment.students track by $index">
                             <h3>{{student}}</h3>
                         </md-list-item>
                     </md-list>

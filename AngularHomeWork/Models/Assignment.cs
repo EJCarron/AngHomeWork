@@ -5,6 +5,7 @@ namespace AngularHomeWork.Models {
 		public string name;
         public string classRoomName;
         public string dueDate;
+        public long dueDateTicks;
         public string description;
 
 
@@ -23,6 +24,7 @@ namespace AngularHomeWork.Models {
             this.name = assignment.name;
             this.classRoomName = assignment.classRoomName;
             this.dueDate = assignment.dueDate;
+            this.dueDateTicks = assignment.dueDateTicks;
             this.description = assignment.description;
             this.students = students;
         }
@@ -36,6 +38,7 @@ namespace AngularHomeWork.Models {
             this.id = assignment.id;
             this.name = assignment.name;
             this.classRoomName = assignment.classRoomName;
+            this.dueDateTicks = assignment.dueDateTicks;
             this.dueDate = assignment.dueDate;
             this.description = assignment.description;
             this.markedDone = markedDone;

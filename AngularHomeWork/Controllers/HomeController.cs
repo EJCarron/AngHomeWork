@@ -60,7 +60,12 @@ namespace AngularHomeWork.Controllers {
                 }
             }
 
-            return View();
+
+            LoginPageModelResponse pageModelResponse = TheDataStore.FetchLoginPageModel();
+
+            LoginPageModel pageModel = pageModelResponse.pageModel;
+
+            return View(pageModel);
         }
 
 
@@ -69,11 +74,11 @@ namespace AngularHomeWork.Controllers {
            
             int userId = Convert.ToInt32( HttpContext.User.Identity.Name);
 
-            UserResponse response = TheDataStore.FetchTeacher(userId);
+            TeacherPageModelResponse response = TheDataStore.FetchTeacher(userId);
 
-            Teacher teacher = (Teacher)response.user;
+            TeacherPageModel pageModel = response.pageModel;
 
-            return View(teacher);
+            return View(pageModel);
         }
 
         [Authorize (Roles = "Student") ]
@@ -81,11 +86,11 @@ namespace AngularHomeWork.Controllers {
 
             int userId = Convert.ToInt32(HttpContext.User.Identity.Name);
 
-            UserResponse userResponse = TheDataStore.FetchStudent(userId);
+            StudentPageModelResponse response = TheDataStore.FetchStudent(userId);
 
-            Student student = (Student)userResponse.user;
+            StudentPageModel pageModel = response.pageModel;
 
-            return View(student);
+            return View(pageModel);
 
         }
 

@@ -49,6 +49,14 @@
             doHttpGetRequest(magicStrings.outStandingController, null,  $scope);
         }
 
+        this.showAlertDialog = function(message) {
+
+            var $event = "";
+
+            showDialog( $event, message, 2);
+
+        } 
+
 
 //-----------------------HttpRequests ---------------------------
 

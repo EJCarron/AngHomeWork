@@ -113,6 +113,11 @@
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\StudentAssignmentController.cs" />
     <Compile Include="Controllers\OutStandingController.cs" />
+    <Compile Include="Models\SystemSettings.cs" />
+    <Compile Include="Models\LoginPageModel.cs" />
+    <Compile Include="Models\TeacherPageModel.cs" />
+    <Compile Include="Models\StudentPageModel.cs" />
+    <Compile Include="Models\PageModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

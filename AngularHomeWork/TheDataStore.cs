@@ -523,30 +523,47 @@ namespace AngularHomeWork {
         //}
 
 
-        public static UserResponse FetchStudent(int studentId){
+        public static StudentPageModelResponse FetchStudent(int studentId){
 
-            UserResponse userResponse = new UserResponse();
+            StudentPageModelResponse pageModelResponse = new StudentPageModelResponse();
 
-            string[] subscriptions = getStudentSubs(userResponse.response, studentId);
+            string[] subscriptions = getStudentSubs(pageModelResponse.response, studentId);
 
             Student student = new Student(subscriptions);
 
-            userResponse.user = student;
 
-            getUserData(userResponse, studentId);
+            SystemSettings settings = FetchSettings(pageModelResponse.response);
 
-            return userResponse;
+
+            StudentPageModel pageModel = new StudentPageModel(student, settings);
+
+            pageModelResponse.pageModel = pageModel;
+
+            getUserData(student, studentId, pageModelResponse.response);
+
+            return pageModelResponse;
 
         }
 
+        public static LoginPageModelResponse FetchLoginPageModel(){
 
 
-        public static UserResponse FetchTeacher(int teacherId) {
-            UserResponse userResponse = new UserResponse();
+            LoginPageModelResponse pageModelResponse = new LoginPageModelResponse();
 
-            // Collection<ClassRoomListItem> classRooms = makeClassRoomListItems(userResponse.response, teacherId);
+            SystemSettings settings = FetchSettings(pageModelResponse.response);
 
-            Collection<string> classRoomNames = getClassRoomNames(userResponse.response, teacherId);
+            LoginPageModel pageModel = new LoginPageModel(settings);
+
+            pageModelResponse.pageModel = pageModel;
+
+            return pageModelResponse;
+
+        }
+
+        public static TeacherPageModelResponse FetchTeacher(int teacherId) {
+            TeacherPageModelResponse pageModelResponse = new TeacherPageModelResponse();
+
+            Collection<string> classRoomNames = getClassRoomNames(pageModelResponse.response, teacherId);
 
             string[] arrayOfCRNames = new string[classRoomNames.Count];
 
@@ -555,17 +572,94 @@ namespace AngularHomeWork {
 
             Teacher teacher = new Teacher(arrayOfCRNames);
 
-            userResponse.user = teacher;
+            SystemSettings settings = FetchSettings(pageModelResponse.response);
 
-            getUserData(userResponse, teacherId);
+            TeacherPageModel pageModel = new TeacherPageModel(teacher, settings);
 
-            return userResponse;
+            pageModelResponse.pageModel = pageModel;
+
+            getUserData(teacher, teacherId, pageModelResponse.response);
+
+            return pageModelResponse;
 
 
 
         }
 
-        private static void getUserData(UserResponse userResponse, int userId){
+        private static SystemSettings FetchSettings(Response response){
+
+            SELECT select = new SELECT().star().FROM(Tables.Settings);
+
+            Collection<Setting> settings = new Collection<Setting>();
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                    settings.Add(
+                        new Setting(
+                            reader.GetInt32(Settings.id),
+                            reader.GetString(Settings.value)
+                        )
+                    );
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+
+            return makeSettings(settings);
+        }
+
+
+        private static SystemSettings makeSettings(Collection<Setting> settingsCollection){
+
+            string schoolName = "";
+            string phoneNumber = "";
+
+            foreach(Setting setting in settingsCollection){
+
+                switch(setting.id){
+
+                    case (int)SettingsId.name:
+                        schoolName = setting.value;
+                        break;
+
+                    case (int)SettingsId.phoneNumber:
+                        phoneNumber = setting.value;
+                        break;
+
+                }
+
+            }
+
+
+            SystemSettings settings = new SystemSettings(schoolName, phoneNumber);
+
+            return settings;
+
+        }
+
+
+        private static void getUserData(User user, int userId, Response response){
 
             SELECT select = new SELECT()
                 .star()
@@ -591,14 +685,14 @@ namespace AngularHomeWork {
 
                 while (reader.Read()) {
 
-                    userResponse.user.name = reader.GetString(Users.userName);
+                    user.name = reader.GetString(Users.userName);
 
                 }
                 reader.Close();
 
             } catch (Exception ex) {
 
-                userResponse.response.setError(ex.ToString());
+                response.setError(ex.ToString());
             }
 
             conn.Close();
@@ -1148,6 +1242,7 @@ namespace AngularHomeWork {
                     assignment.name = reader.GetString(Assignments.assignmentName);
                     assignment.classRoomName = reader.GetString(Assignments.classRoomName);
                     assignment.dueDate = Convert.ToDateTime(reader[Assignments.dueDate]).ToString("d");
+                    assignment.dueDateTicks = Convert.ToDateTime(reader[Assignments.dueDate]).Ticks;
                     assignment.description = reader.GetString(Assignments.description);
 
                 }
@@ -1413,8 +1508,10 @@ namespace AngularHomeWork {
             return response;
         }
 
-        public static Response createAssignment(string newName, string classRoomName, DateTime newDueDate, string newDescription){
+        public static Response createAssignment(string newName, string classRoomName, long newDueDateTicks, string newDescription){
             Response response = new Response();
+
+            DateTime newDueDate = new DateTime(newDueDateTicks);
 
 
             INSERTINTO insert = new INSERTINTO(Tables.Assignments)
@@ -1449,11 +1546,11 @@ namespace AngularHomeWork {
         }
 
 
-        public static Response editAssignment(int id, string newName, DateTime newDueDate, string newDescription, int newArchiveStatus){
+        public static Response editAssignment(int id, string newName, long newDueDateTicks, string newDescription, int newArchiveStatus){
 
             Response response = new Response();
 
-
+            DateTime newDueDate = new DateTime(newDueDateTicks);
 
 
             UPDATE update = new UPDATE(Tables.Assignments)

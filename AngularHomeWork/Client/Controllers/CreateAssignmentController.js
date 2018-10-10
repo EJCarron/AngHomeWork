@@ -7,11 +7,25 @@
 
         $scope.cancelBtnClicked = function(classRoomName){
 
-            $scope.$parentScope.classRoomBtnClicked(classRoomName);
+            $scope.$parent.classRoomBtnClicked(classRoomName);
         }
 
         $scope.goBtnClicked = function() {
-            $scope.$parent.createAssignment($scope.newName, $routeParams.classRoomName, $scope.newDueDate, $scope.newDescription)
+
+            if(
+                ($scope.newName == null)
+                ||
+                ($scope.newDueDate == null)
+                ||
+                ($scope.newDescription == null)
+            ) {
+                $scope.$parent.showAlertDialog("All fields must be completed");
+            }else{
+
+                var dueDateTicks = (($scope.newDueDate.getTime() * 10000) + 621356832000000000);
+
+                $scope.$parent.createAssignment($scope.newName, $routeParams.classRoomName, dueDateTicks, $scope.newDescription)
+            }
         }
     }
 

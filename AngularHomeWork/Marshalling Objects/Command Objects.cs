@@ -30,7 +30,7 @@ namespace AngularHomeWork.MarshallingObjects {
     public class CreateAssignmentCO : CommandObject{
         public string newName;
         public string classRoomName;
-        public DateTime newDueDate;
+        public long newDueDateTicks;
         public string newDescription;
 
     }
@@ -38,7 +38,7 @@ namespace AngularHomeWork.MarshallingObjects {
     public class EditAssignmentCO : CommandObject{
         public int id;
         public string newName;
-        public DateTime newDueDate;
+        public long newDueDateTicks;
         public string newDescription;
         public int newArchiveStatus;
 

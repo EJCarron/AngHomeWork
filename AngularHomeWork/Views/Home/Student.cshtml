@@ -3,7 +3,7 @@
 }
 
 @using AngularHomeWork.Models
-@model AngularHomeWork.Models.Student
+@model AngularHomeWork.Models.StudentPageModel
 
 
 <!DOCTYPE html>
@@ -16,14 +16,27 @@
 <body 
     ng-app="app"
     ng-controller="studentPageController"
-    ng-init="subscriptions = @Html.Raw(Json.Encode(Model.subscriptions).Replace("\"", "'")) ; studentName = '@Model.name'; "
+    ng-init=
+        "
+        subscriptions = @Html.Raw(Json.Encode(Model.student.subscriptions).Replace("\"", "'")) ;
+        studentName = '@Model.student.name'; 
+        schoolName = '@Model.settings.schoolName' ;
+        "
     layout="column"
     id="studentPage"
     >
 
-    <md-toolbar class="md-primary" layout="row">
-        <p layout-margin>{{studentName}}</p>
-        <md-button ng-click="logoutBtnClicked()">Logout</md-button>
+    <md-toolbar class="md-primary" layout="row" layout-align="space-between center">
+        
+            <p layout-margin>{{schoolName}}</p>
+
+            <p>{{studentName}}</p>
+        
+
+
+        <md-button ng-click="logoutBtnClicked()" class="md-accent md-raised md-hue-1">Logout</md-button>
+
+
     </md-toolbar>
 
     <div class="container" layout="row" flex>

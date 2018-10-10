@@ -4,9 +4,11 @@
     var SubscribeToClassRoomController = function($scope){
 
         $scope.goBtnClicked = function() {
-
-           $scope.$parent.subscribeToClassRoom($scope.name)
-
+            if ($scope.name == null) {
+                $scope.$parent.showAlertDialog("The classroom name field must completed.");
+            }else{
+                $scope.$parent.subscribeToClassRoom($scope.name);
+            }
         }
     }
 

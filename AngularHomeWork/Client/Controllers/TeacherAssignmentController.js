@@ -15,6 +15,8 @@
         $scope.$watch('selectedAssignment', function(newValue, oldValue) {
 
             $scope.assignment = newValue;
+
+
            
         });
     }

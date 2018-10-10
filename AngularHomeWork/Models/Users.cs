@@ -4,9 +4,13 @@ namespace AngularHomeWork.Models {
     public class User {
         public string name { get; set; }
         public int userType { get; set; }
-        public int schoolId { get; set; }
+
 
     }
+
+
+
+
 
     public class UserResponse {
         public User user { get; set; }
@@ -21,6 +25,37 @@ namespace AngularHomeWork.Models {
     }
 
 
+    public class StudentPageModelResponse {
+        public StudentPageModel pageModel;
+        public Response response;
+
+        public StudentPageModelResponse() {
+            this.response = new Response();
+        }
+
+    }
+
+
+    public class TeacherPageModelResponse{
+        public TeacherPageModel pageModel;
+        public Response response;
+
+        public TeacherPageModelResponse(){
+            this.response = new Response();
+        }
+
+    }
+
+
+    public class LoginPageModelResponse {
+        public LoginPageModel pageModel;
+        public Response response;
+
+
+        public LoginPageModelResponse(){
+            this.response = new Response();
+        }
+    }
 
 
     public class LoginResponse{

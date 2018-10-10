@@ -38,17 +38,17 @@
             doHttpGetRequest(magicStrings.assignmentController, assignmentId, $scope);
         }
 
-        this.createAssignment = function(newName, classRoomName, newDueDate, newDescription, $scope){
+        this.createAssignment = function(newName, classRoomName, newDueDateTicks, newDescription, $scope){
 
-            var commandObject = makeCreateAssignmentCO(newName, classRoomName, newDueDate, newDescription);
+            var commandObject = makeCreateAssignmentCO(newName, classRoomName, newDueDateTicks, newDescription);
 
             doHttpRequest(magicStrings.POST, magicStrings.assignmentController, magicStrings.createAction, $scope, commandObject, magicStrings.crtAssSucc);
 
         }
 
-        this.editAssignment = function(assignment, $scope){
+        this.editAssignment = function(assignment, newDueDateTicks, $scope){
 
-            var commandObject = makeEditAssignmentCO(assignment.id, assignment.name, assignment.dueDate, assignment.description, 0, assignment.classRoomName);
+            var commandObject = makeEditAssignmentCO(assignment.id, assignment.name, newDueDateTicks, assignment.description, 0, assignment.classRoomName);
 
             doHttpRequest(magicStrings.PUT, magicStrings.assignmentController, magicStrings.editAction, $scope, commandObject);
         }
@@ -59,6 +59,15 @@
 
             doHttpRequest(magicStrings.PUT, magicStrings.assignmentController, magicStrings.editAction, $scope, commandObject);
         }
+
+
+        this.showAlertDialog = function(message) {
+
+            var $event = "";
+
+            showDialog( $event, message, 2);
+
+        } 
 
 //-----------------------Http Request--------------------------
 
@@ -264,7 +273,7 @@
             return archiveClassRoomCO;
         }
 
-        var makeCreateAssignmentCO = function(newName, classRoomName, newDueDate, newDescription){
+        var makeCreateAssignmentCO = function(newName, classRoomName, newDueDateTicks, newDescription){
 
             var classRoomRequest = makeSubRequest(1, classRoomName, -1);
 
@@ -274,7 +283,7 @@
                 requestObject: requestObject,
                 newName: newName,
                 classRoomName: classRoomName,
-                newDueDate: newDueDate,
+                newDueDateTicks: newDueDateTicks,
                 newDescription: newDescription
             }
 
@@ -283,7 +292,7 @@
         }
 
 
-        var makeEditAssignmentCO = function(id, newName, newDueDate, newDescription, newArchiveStatus, classRoomName){
+        var makeEditAssignmentCO = function(id, newName, newDueDateTicks, newDescription, newArchiveStatus, classRoomName){
 
             var assignmentRequest =  makeSubRequest(1,classRoomName,-1);
 
@@ -293,7 +302,7 @@
                 requestObject: requestObject,
                 id: id,
                 newName: newName,
-                newDueDate: newDueDate,
+                newDueDateTicks: newDueDateTicks,
                 newDescription: newDescription,
                 newArchiveStatus: newArchiveStatus        
             }

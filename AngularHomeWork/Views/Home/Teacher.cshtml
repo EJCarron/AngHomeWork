@@ -3,7 +3,7 @@
 }
 
 @using AngularHomeWork.Models
-@model AngularHomeWork.Models.Teacher
+@model AngularHomeWork.Models.TeacherPageModel
 
 <!DOCTYPE html>
 <html>
@@ -20,13 +20,26 @@
 <body 
     ng-app="app" 
     ng-controller="teacherPageController" 
-    ng-init="classRooms = @Html.Raw(Json.Encode(Model.classRoomNames).Replace("\"", "'")) ; teacherName = '@Model.name'; " 
+    ng-init=
+    "
+    classRooms = @Html.Raw(Json.Encode(Model.teacher.classRoomNames).Replace("\"", "'")) ;
+    teacherName = '@Model.teacher.name';
+    schoolName = '@Model.settings.schoolName' ;
+    " 
     layout="column"
 >
 
-    <md-toolbar class="md-primary" layout="row">
-        <p layout-margin>{{teacherName}}</p>
-        <md-button ng-click="logoutBtnClicked()">Logout</md-button>
+    <md-toolbar class="md-primary" layout="row" layout-align="space-between center">
+        
+            <p layout-margin>{{schoolName}}</p>
+
+            <p>{{teacherName}}</p>
+        
+
+
+        <md-button ng-click="logoutBtnClicked()" class="md-accent md-raised md-hue-1">Logout</md-button>
+
+
     </md-toolbar>
 
     <div class="container" layout="row" flex>

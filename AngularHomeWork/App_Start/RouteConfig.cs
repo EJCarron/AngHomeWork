@@ -51,11 +51,11 @@ namespace AngularHomeWork {
                 defaults: new { controller = "Home", action = "Student" }
             );
 
-            routes.MapRoute(
-                name: "Login",
-                url: "{controller}/Login",
-                defaults: new { controller = "Home", action = "Login" }
-            );
+            //routes.MapRoute(
+            //    name: "Login",
+            //    url: "{controller}/Login",
+            //    defaults: new { controller = "Home", action = "Login" }
+            //);
         }
     }
 }

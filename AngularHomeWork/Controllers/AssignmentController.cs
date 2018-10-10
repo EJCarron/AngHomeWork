@@ -36,7 +36,7 @@ namespace AngularHomeWork.Controllers
 
             int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
             
-            Response response = TheDataStore.createAssignment(cO.newName, cO.classRoomName, cO.newDueDate, cO.newDescription);
+            Response response = TheDataStore.createAssignment(cO.newName, cO.classRoomName, cO.newDueDateTicks, cO.newDescription);
 
             return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
 
@@ -47,7 +47,7 @@ namespace AngularHomeWork.Controllers
 
             int userId = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
 
-            Response response = TheDataStore.editAssignment(cO.id, cO.newName, cO.newDueDate, cO.newDescription, cO.newArchiveStatus);
+            Response response = TheDataStore.editAssignment(cO.id, cO.newName, cO.newDueDateTicks, cO.newDescription, cO.newArchiveStatus);
 
             return TheDataStore.makeHttpResponseMessage(response, cO.requestObject, Request, userId);
         }

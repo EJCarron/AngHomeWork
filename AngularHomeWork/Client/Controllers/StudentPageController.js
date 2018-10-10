@@ -49,6 +49,8 @@
 
         $scope.changeAssignmentDoneStatus = function(assignmentId, currentDoneState, classRoomName) {
 
+            $scope.setSelectedClassRoom(classRoomName);
+
             modelCommand.changeAssignmentDoneStatus(assignmentId, currentDoneState, classRoomName, $scope);
         }
 
@@ -66,6 +68,11 @@
         $scope.getOutStandingAssignments = function(){
 
             modelCommand.getOutStandingAssignments($scope);
+        }
+
+        $scope.showAlertDialog = function(message) {
+
+            modelCommand.showAlertDialog(message);
         }
     }
 

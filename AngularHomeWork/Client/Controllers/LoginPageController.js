@@ -12,6 +12,11 @@
 
             modelCommand.attemptLogin(email, password);
         }
+
+        $scope.showAlertDialog = function(message) {
+
+            modelCommand.showAlertDialog(message);
+        }
     }
 
     app.controller("loginPageController", LoginPageController);
