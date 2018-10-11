@@ -118,6 +118,7 @@
     <Compile Include="Models\TeacherPageModel.cs" />
     <Compile Include="Models\StudentPageModel.cs" />
     <Compile Include="Models\PageModel.cs" />
+    <Compile Include="Controllers\TodaysAssignmentsController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

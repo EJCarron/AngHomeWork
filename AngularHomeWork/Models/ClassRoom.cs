@@ -13,7 +13,7 @@ namespace AngularHomeWork.Models {
         public string title;
         public string dueDate;
         public int id;
-
+        public string classRoomName;
     }
 
 

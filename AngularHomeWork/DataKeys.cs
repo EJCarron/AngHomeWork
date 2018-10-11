@@ -12,7 +12,8 @@ namespace AngularHomeWork {
             studentClassRoom = 4,
             subscriptionList = 5,
             studentAssignment = 6,
-            outStandingAssignments = 7
+            outStandingAssignments = 7,
+            todaysAssignments = 8
     }
 
     public enum UserType {

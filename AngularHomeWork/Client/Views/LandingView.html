@@ -1,7 +1,117 @@
-﻿<body>
+﻿<body >
+    <div flex layout-align="center center">
+        <md-card flex="75">
+            <md-card-content>
+                <h1>Intro</h1>
+                <p>
+                    Hey I’m Ed, a self taught full stack developer (Asp.Net) looking for a job in any part of the stack. This homework management app is my latest and most developed project. Feel free to register your own account, or to see some already fleshed out profiles log in using either:
 
-    <h1>Intro</h1>
-    <p>Hey, my name is Edward Carron, this is my web App. It's an homework assignment manegment system</p>
+                </p>
+                <ul>
+                    <li>email: teacher@example.com | password: 1234</li>
+                    <li>email: student@example.com | password: 4321</li>
+                </ul>
+
+                <h1>Features</h1>
+
+                <h3>Schools</h3>
+                <ul>
+                    <li>Each school will host the app and database from their own servers.</li>
+                    <li>Allowing the Schools to have more oversite over their own data.</li>
+                    <li>As the program is read heavy, having each school's data on it's own database results in scalability being far less of an issue.</li>
+                </ul>
+                <h3>Teachers</h3>
+                <ul>
+                    <li>Create and delete classrooms.</li>
+                    <li>Create, edit, and delete assignments, inside each classroom.</li>
+                    <li>Can view which students have marked an assignment as done.</li>
+                </ul>
+                <h3>Students</h3>
+                <ul>
+                    <li>Subscribe to classrooms.</li>
+                    <li>See the assignments that they have been set for each classroom.</li>
+                    <li>Mark assignmemts as done.</li>
+                </ul>
+                <h1>Tech Stack</h1>
+                <ul>
+                    <li>
+                        <h3>Front end</h3>
+                        <p>Material Design</p>
+                        <p>AngularJs </p>
+                        <p>Ajax</p>
+                    </li>
+                    <li>
+                        <h3>Mid-Tier</h3>
+                        <p>Web Forms security</p>
+                        <p>Asp.Net MVC</p>
+                        <p>Asp.Net Web Api</p>
+                        <p>Razor</p>
+                        <p>JSON</p>
+                        <p>Homegrown SQL framework</p>
+                    </li>
+                    <li>
+                        <h3>Data Base</h3>
+                        <p>MySQL</p>
+                    </li>
+                </ul>
+                <h1>About the App</h1>
+                <ul>
+                    <li>
+                        <h3>My Objective</h3>
+                        <p>
+                            The choice of technologies was driven by the following design objectives.
+                        </p>
+                        <ol>
+                            <li>
+                                Responsiveness - AJAX rather than ASP.net forms.
+                            </li>
+                            <li>
+                                Security - The built in security features of both AngularJs (Html encoding) and Asp.net MVC (Web Forms, Role Authorisation).
+                            </li>
+                            <li>
+                                Clean consistent look - Material Design.
+                            </li>
+                            <li>
+                                Separation of code and graphics in the front end - AngularJs.
+                            </li>
+                            <li>
+                                Maintainability - use of MVC pattern on server and client.
+                            </li>
+                            <li>
+                                Multiple client platforms - RESTful interface.
+                            </li>
 
 
+                        </ol>
+                    </li>
+                    <li>
+                        <h3>Problems encountered</h3>
+                        <p>The biggest problem that I encountered was in deciding which architecture to use. Initially I tried to build the whole thing using only MVC controllers and the standard Asp.Net MVC pattern. However I found that this meant that each button click would mean loading up a whole new angularJs app, not only was this slow and clunky, it also seemed like a wast of AngularJs. So instead I opted to use the Asp.net MVC controllers to navigate to 3 single page AngularJs apps (Login, Teacher, and Student), loaded with some initial data through Razor. Then all subsequent server calls would be done with Ajax routed through Asp.Net Web Api controllers. </p>
+                        <p></p>
+                    </li>
+                    <li>
+                        <h3>Future improvements</h3>
+                        <p>Mobile browser support.</p>
+                        <p>BootStrap.</p>
+                        <p>Server Side logging system.</p>
+                    </li>
+                    <li>
+                        <h3>Scalability</h3>
+                        <p>Because every school will be running it on their own server there are no scalability issues.</p>
+                    </li>
+                    <li>
+                        <h3>Security</h3>
+                        <p>
+                            Hashing and salting user passwords, encrypted with  SHA256
+                        </p>
+                        <p>Web Forms Authentification via login details held on data base.</p>
+                        <p>User Roles Authorisation</p>
+                        <p>Html encoding built into AngularJs to avoid cross-site-scripting attacks.</p>
+                        <p>Fully parameterised SQL to avoid SQL injection.</p>
+                        <p>Stopping cookie theft, via script attack, by adding an 'HttpOnly' flag to my web.config file.</p>
+                    </li>
+                </ul>
+            </md-card-content>
+        </md-card>
+    </div>
 </body>

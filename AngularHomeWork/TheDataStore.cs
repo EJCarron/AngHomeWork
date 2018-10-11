@@ -105,6 +105,9 @@ namespace AngularHomeWork {
                 case RequestType.outStandingAssignments:
                     subResponse = FetchOutStandingAssignments(request, response, userId);
                     break;
+                case RequestType.todaysAssignments:
+                    subResponse = FetchTodaysAssignments(request, response, userId);
+                    break;
             }
 
             return subResponse;
@@ -898,6 +901,82 @@ namespace AngularHomeWork {
             subResponse.modelObject = subs;
 
             return subResponse;
+
+        }
+
+
+        private static SubResponse FetchTodaysAssignments(SubRequest request,Response response, int userId){
+
+            SubResponse subResponse = new SubResponse();
+
+            Collection<AssignmentListItem> assignments = new Collection<AssignmentListItem>();
+
+            SELECT select = new SELECT()
+                .col(Assignments.assignmentName)
+                .col(Assignments.classRoomName)
+                .col(Assignments.assignmentId)
+                .FROMJOIN(Tables.Assignments, Tables.ClassRooms, new OperatorExpression()
+                          .addExpression(Assignments.classRoomName)
+                          .Equals()
+                          .addExpression(ClassRooms.classRoomName)
+                         )
+                .WHERE(new OperatorExpression()
+                       .addExpression(Assignments.dueDate)
+                       .Equals()
+                       .addExpression(new DateLiteral(DateTime.Today))
+                       .AND()
+                       .addExpression(ClassRooms.teacherId)
+                       .Equals()
+                       .addExpression(new IntLiteral(userId))
+                      );
+
+            //Debug Code------------------------------------------------
+
+            Console.WriteLine(select.render(ERenderType.NonParamed));
+            //Debug Code------------------------------------------------
+
+
+            MySqlConnection conn = new MySqlConnection(DataKeys.dataBaseConnectionString);
+
+            MySqlCommand command = select.makeMySqlCommand(conn, ERenderType.Paramed);
+
+            try {
+
+                conn.Open();
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) {
+
+                        AssignmentListItem assignment = new AssignmentListItem();
+
+                        assignment.classRoomName = reader.GetString(Assignments.classRoomName);
+                        assignment.id = reader.GetInt32(Assignments.assignmentId);
+                        assignment.title = reader.GetString(Assignments.assignmentName);
+
+
+                        assignments.Add(assignment);
+
+
+                }
+                reader.Close();
+
+            } catch (Exception ex) {
+
+                response.setError(ex.ToString());
+            }
+
+            conn.Close();
+
+            AssignmentListItem[] arrayOfALs = new AssignmentListItem[assignments.Count];
+
+            assignments.CopyTo(arrayOfALs, 0);
+
+            subResponse.requestType = RequestType.todaysAssignments;
+
+            subResponse.modelObject = arrayOfALs;
+
+            return subResponse;
+
 
         }
 

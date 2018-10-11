@@ -1,5 +1,19 @@
 ﻿
 <body ng-controller="teacherHomeController">
-    <h1>Hello Home</h1>
-
+    <h1>Hello Home {{teacherName}}</h1>
+    <md-card flex="50">
+        <md-card-content>
+            <md-toolbar class="md-accent md-hue-1">
+                <p layout-padding>Todays Assignments</p>
+            </md-toolbar>
+            <md-list>
+                <md-list-item class="md-2-line" ng-repeat="assignment in todaysAssignments track by $index">
+                    <md-button ng-click="assignmentBtnClicked(assignment.id)" href="#!/TeacherAssignmennt/{{assignment.id}}" class="md-list-item-text" layout="column">
+                        <h3>{{assignment.title}}</h3>
+                        <h4>{{assignment.classRoomName}}</h4>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
 </body>

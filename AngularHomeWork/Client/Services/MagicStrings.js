@@ -17,7 +17,7 @@
         this.subscriptionController = "Subscription";
         this.studAssignmentController = "StudentAssignment";
         this.outStandingController = "OutStanding";
-
+        this.todaysAssignmentsController = "TodaysAssignments";
 
         this.archiveAction = "archive";
         this.createAction = "create";

@@ -82,6 +82,11 @@
 
             modelCommand.showAlertDialog(message);
         }
+
+        $scope.getTodaysAssignments = function() {
+
+            modelCommand.getTodaysAssignments($scope);
+        }
     }
 
     app.controller("teacherPageController", TeacherPageController);

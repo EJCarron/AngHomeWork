@@ -67,16 +67,24 @@
 
             showDialog( $event, message, 2);
 
-        } 
+        }
+
+        this.getTodaysAssignments = function($scope) {
+
+
+            doHttpGetRequest(magicStrings.todaysAssignmentsController,null, $scope);
+        }
 
 //-----------------------Http Request--------------------------
 
 
         var doHttpGetRequest = function(controller, parameter, $scope){
 
+            var paramaterPathExtenstion = parameter?( "/" + parameter):'';
+
             $http({
                 method : "GET",
-                url : (magicStrings.apiURL + controller + "/" + magicStrings.getAction + "/" + parameter)
+                url : (magicStrings.apiURL + controller + "/" + magicStrings.getAction + paramaterPathExtenstion)
                 }).then(function success(response) {
 
                     dealWithGenericResponse(response.data, $scope)
@@ -183,7 +191,10 @@
                     }break;
                     case 3:{
                         assignmentArrived(subResponse, $scope)
-                    }    
+                    }break;
+                    case 8: {
+                        todaysAssignmentsArrived(subResponse, $scope)
+                    }   
                 }
 
             }
@@ -216,6 +227,14 @@
 
                 $scope.selectedAssignment = assignment;
             }
+        }
+
+        var todaysAssignmentsArrived = function(subResponse, $scope){
+        
+             var assignments = subResponse.modelObject;
+
+            $scope.todaysAssignments = assignments;
+        
         }
 
 //----------------------COMMAND OBJECTS -------------------------------

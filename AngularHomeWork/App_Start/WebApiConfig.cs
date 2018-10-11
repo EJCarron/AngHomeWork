@@ -93,6 +93,12 @@ namespace AngularHomeWork {
                 defaults: new { controller = "OutStanding"}
             );
 
+            config.Routes.MapHttpRoute(
+                name: "GetTodaysAssignments",
+                routeTemplate: "api/TodaysAssignments/get",
+                defaults: new { controller = "TodaysAssignments" }
+            );
+
         }
     }
 }

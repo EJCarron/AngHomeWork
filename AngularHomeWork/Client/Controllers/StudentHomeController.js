@@ -3,7 +3,7 @@
 
     var StudentHomeController = function($scope,  $routeParams , modelCommand, $mdDialog){
 
-        $scope.$parent.getOutStandingAssignments();
+        $scope.$parent.getTodaysAssignments();
 
         $scope.assignmentBtnClicked = function(assignmentId){
 
