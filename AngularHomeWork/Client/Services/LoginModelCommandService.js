@@ -12,7 +12,7 @@
 
              $http({
                 method : "POST",
-                url : ("http://127.0.0.1:8080/api/User/register"),
+                url : ("/api/User/register"),
                 data : commandObject
                 }).then(function success(response) {
 
@@ -39,7 +39,7 @@
 
             $http({
                 method : "GET",
-                url : ("http://127.0.0.1:8080/api/User/attemptLogin/"+email+"/"+passwordAttempt)
+                url : ("/api/User/attemptLogin/"+email+"/"+passwordAttempt)
                 }).then(function success(response) {
 
                     var loginResponse = response.data;
@@ -83,7 +83,7 @@
                 }break;
             }
 
-            window.location.href = 'http://127.0.0.1:8080/Home/'+ controller;
+            window.location.href = '/Home/'+ controller;
 
         }
 
